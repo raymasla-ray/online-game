@@ -4,13 +4,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>有趣小遊戲</title>
+
+    <meta name="description" content="免下載！多人玩家連線匿名遊玩！圈圈叉叉⭕❌四連棋UNO♠️♣️誰是臥底🕵️Yahtzee Yahtzee，甚至還有 21 點等多款經典遊戲！ ">
+    <meta name="keywords" content="UNO網頁版, Yahtzee online, 快艇骰子遊戲, 免費網頁遊戲, raymasla, 阿叡的遊戲,阿叡網頁,線上圈圈叉叉,免下載多人遊戲,免下載UNO,多人好友UNO">
+    <meta name="author" content="阿叡game">
+
+    <link rel="icon" href="icon.png" type="image/png">
+
     <style>
         /* ========================================= */
         /* --- 全局暗色系主題與動畫 (Dark Theme) --- */
         /* ========================================= */
         :root {
             --bg-color: #0f172a;
-            --container-bg: rgba(30, 41, 59, 0.9);
+            --container-bg: rgba(30, 41, 59, 0.85);
             --text-main: #e2e8f0;
             --text-muted: #94a3b8;
             --primary-grad: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
@@ -33,9 +40,9 @@
             padding: 20px;
             margin: 0;
             min-height: 100vh;
+	    min-height: 100dvh;
             touch-action: manipulation;
             overflow-x: hidden;
-            -webkit-tap-highlight-color: transparent;
         }
 
         @keyframes gradientBG {
@@ -44,6 +51,7 @@
             100% { background-position: 0% 50%; }
         }
 
+        /* 容器美化 - 玻璃擬態 */
         .container {
             background: var(--container-bg);
             padding: 25px;
@@ -59,7 +67,7 @@
             position: relative;
             z-index: 10;
             transition: all 0.3s ease;
-            animation: fadeInUp 0.5s ease-out;
+            animation: fadeIn Up 0.5s ease-out;
         }
 
         @keyframes fadeInUp {
@@ -70,6 +78,7 @@
         h1, h3, h4 { margin-top: 0; color: #fff; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
         .hidden { display: none !important; }
 
+        /* --- 按鈕美化 --- */
         button { font-family: inherit; }
         .menu-btn {
             width: 100%; padding: 16px; margin: 12px 0; font-size: 18px; cursor: pointer;
@@ -94,6 +103,7 @@
         .btn-liar { background: linear-gradient(135deg, #f97316, #ea580c); box-shadow: 0 4px 15px rgba(234, 88, 12, 0.3); }
         .btn-liar:hover { box-shadow: 0 8px 25px rgba(234, 88, 12, 0.6); }
 
+        /* 小按鈕 */
         .btn-sm { border: none; padding: 6px 14px; border-radius: 8px; cursor: pointer; font-size: 0.85em; margin-left: 6px; color: white; transition: 0.2s; font-weight: 600; }
         .btn-green { background: var(--accent-green); box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3); }
         .btn-green:hover { background: #059669; }
@@ -128,6 +138,7 @@
         .status-wait { background: rgba(16, 185, 129, 0.2); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.3); }
         .status-play { background: rgba(239, 68, 68, 0.2); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.3); }
 
+        /* --- 統計與輸入框 --- */
         .stats-bar {
             background: rgba(0,0,0,0.2); padding: 12px; border-radius: 10px;
             margin-bottom: 20px; font-size: 0.95em; color: var(--text-muted);
@@ -146,6 +157,7 @@
         .settings-item { flex: 1; display: flex; flex-direction: column; color: var(--text-muted); font-size: 0.9em; }
         .settings-item input { margin-top: 5px; width: 100%; box-sizing: border-box; }
 
+        /* 騙子規則區塊優化 */
         #liarSettings {
             background: rgba(67, 20, 7, 0.4) !important;
             border: 1px solid rgba(234, 88, 12, 0.3);
@@ -161,7 +173,7 @@
             border-radius: 8px; padding: 10px; font-size: 0.9em; margin-bottom: 10px;
             border: 1px solid rgba(255,255,255,0.05); color: var(--text-main);
         }
-        #chat-msgs div { margin-bottom: 4px; animation: fadeIn 0.3s; word-break: break-all; }
+        #chat-msgs div { margin-bottom: 4px; animation: fadeIn 0.3s; }
         #chat-msgs b { color: #a5b4fc; margin-right: 5px; }
         
         .chat-input-group { display: flex; gap: 8px; }
@@ -174,7 +186,7 @@
         .editable-name { color: #60a5fa; font-weight: bold; cursor: pointer; border-bottom: 1px dashed #60a5fa; transition: 0.2s; }
         .editable-name:hover { color: #93c5fd; border-color: #93c5fd; }
 
-        /* 浮動聊天 */
+        /* 浮動聊天 (Danmaku) */
         .floating-chat-container {
             position: absolute; top: 0; left: 0; width: 100%; height: 60%;
             pointer-events: none; overflow: hidden; z-index: 900;
@@ -196,7 +208,7 @@
             100% { opacity: 0; bottom: 85%; transform: translateX(-50%); }
         }
 
-        /* --- 棋盤遊戲樣式 --- */
+        /* --- 棋盤遊戲樣式 (Dark Board) --- */
         #gameArea { transition: 0.3s; }
         :root { --c4-cell-size: 40px; --p1-color: #f87171; --p2-color: #facc15; }
         
@@ -259,6 +271,7 @@
             text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
         }
         
+        /* 頂部資訊 */
         .liar-header {
             display: flex; justify-content: space-between; align-items: center;
             background: rgba(0,0,0,0.6); padding: 8px 15px; border-radius: 30px;
@@ -272,6 +285,7 @@
             text-shadow: none; animation: popIn 0.3s;
         }
 
+        /* 牌桌中央 */
         .liar-table-center {
             flex: 1; position: relative;
             display: flex; justify-content: center; align-items: center;
@@ -279,6 +293,7 @@
             flex-direction: column; 
         }
         
+        /* 卡牌設計 */
         .card {
             width: 55px; height: 80px;
             background: #e2e2e2; border-radius: 6px;
@@ -298,6 +313,7 @@
         }
         .card-back::after { content: "⚜️"; color: rgba(255,255,255,0.4); font-size: 24px; }
 
+        /* 對手區 */
         .opponents-row { display: flex; justify-content: space-around; width: 100%; margin-top: 10px; }
         .opponent {
             background: rgba(0,0,0,0.7); padding: 8px; border-radius: 12px;
@@ -313,6 +329,7 @@
         .opponent.escaped { border-color: #10b981; opacity: 0.9; box-shadow: 0 0 10px #10b981; }
         .opponent.offline { opacity: 0.5; border: 1px dashed #94a3b8; }
         
+        /* 槍膛顯示 */
         .cylinder-display {
             display: flex; justify-content: center; gap: 3px; margin-top: 5px;
         }
@@ -320,6 +337,7 @@
         .bullet-slot.fired { background: #111; box-shadow: inset 0 0 2px rgba(255,255,255,0.2); }
         .bullet-slot.live { background: #ef4444; box-shadow: 0 0 6px #ef4444; }
 
+        /* 我的槍枝狀態顯示 */
         .my-gun-status {
             position: absolute; bottom: 140px; right: 10px;
             background: rgba(0, 0, 0, 0.85); padding: 10px;
@@ -328,6 +346,7 @@
             box-shadow: 0 4px 15px rgba(0,0,0,0.5); z-index: 50;
         }
 
+        /* 手牌區 */
         .my-hand-area {
             height: 110px; display: flex; justify-content: center; align-items: center; gap: -10px;
             padding-bottom: 10px; z-index: 20;
@@ -336,6 +355,7 @@
         .my-hand-area .card:hover { transform: translateY(-20px) scale(1.15); z-index: 50; box-shadow: 0 10px 20px rgba(0,0,0,0.5); }
         .my-hand-area .card.selected { transform: translateY(-30px); border: 3px solid #facc15; box-shadow: 0 0 20px #facc15; }
 
+        /* 遊戲按鈕區 */
         .liar-controls { display: flex; gap: 15px; justify-content: center; margin-bottom: 10px; height: 50px; }
         .btn-game { 
             padding: 0 28px; border-radius: 30px; border: none; font-weight: 800; cursor: pointer; 
@@ -347,11 +367,11 @@
 
         .btn-play { 
             background: linear-gradient(to bottom, #3b82f6, #1d4ed8); 
-            font-size: 1.4em; padding: 0 40px; min-width: 120px; 
-            animation: pulseBtn 1.5s infinite;
+            font-size: 1.4em; 
+            padding: 0 40px; 
+            min-width: 120px; 
         }
-        @keyframes pulseBtn { 0% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.7); } 70% { box-shadow: 0 0 0 10px rgba(59, 130, 246, 0); } 100% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0); } }
-
+        
         .btn-liar-call { background: linear-gradient(to bottom, #ef4444, #b91c1c); font-size: 1.3em; letter-spacing: 2px; }
 
         /* --- 動畫特效層 --- */
@@ -361,8 +381,12 @@
             display: none; flex-direction: row; align-items: center; justify-content: center;
             gap: 20px; backdrop-filter: blur(5px);
         }
-        .intro-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px; }
-        .intro-side { display: flex; flex-direction: column; gap: 10px; margin-left: 20px; padding-left: 20px; border-left: 2px dashed rgba(255,255,255,0.3); }
+        .intro-grid {
+            display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px;
+        }
+        .intro-side {
+            display: flex; flex-direction: column; gap: 10px; margin-left: 20px; padding-left: 20px; border-left: 2px dashed rgba(255,255,255,0.3);
+        }
         .intro-card-sm {
             width: 32px; height: 48px; background: white; border-radius: 4px;
             font-size: 0.9em; display: flex; align-items: center; justify-content: center; font-weight: bold;
@@ -407,6 +431,7 @@
         @keyframes shake { 0% { transform: translate(1px, 1px) rotate(0deg); } 10% { transform: translate(-1px, -2px) rotate(-1deg); } 20% { transform: translate(-3px, 0px) rotate(1deg); } 30% { transform: translate(3px, 2px) rotate(0deg); } 40% { transform: translate(1px, -1px) rotate(1deg); } 50% { transform: translate(-1px, 2px) rotate(-1deg); } 60% { transform: translate(-3px, 1px) rotate(0deg); } 70% { transform: translate(3px, 1px) rotate(-1deg); } 80% { transform: translate(-1px, -1px) rotate(1deg); } 90% { transform: translate(1px, 2px) rotate(0deg); } 100% { transform: translate(1px, -2px) rotate(-1deg); } }
         .shaking { animation: shake 0.5s; }
 
+        /* --- 勝利特效 & 巨大按鈕 (Dark Version) --- */
         #win-overlay { 
             position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
             background: rgba(15, 23, 42, 0.95); display: none; 
@@ -427,10 +452,14 @@
             transition: 0.3s; margin-top: 20px; text-transform: uppercase;
         }
         .big-reset-btn:hover { transform: scale(1.1); box-shadow: 0 0 50px rgba(16, 185, 129, 0.8); }
+        .waiting-text { animation: pulse 1.5s infinite; color: #facc15; }
+        @keyframes pulse { 0% { opacity: 0.6; } 50% { opacity: 1; text-shadow: 0 0 10px #facc15; } 100% { opacity: 0.6; } }
 
-        /* Modal */
+        /* --- Q版輸入暱稱 Modal 樣式 --- */
         .modal-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            position: fixed; top: 0; left: 0; width: 100%; 
+	    height: 100vh;
+	    height: 100dvh;
             background: rgba(0,0,0,0.7); z-index: 2000;
             display: flex; justify-content: center; align-items: center;
             backdrop-filter: blur(5px);
@@ -445,36 +474,297 @@
             animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             color: #fff;
         }
+        .modal-box h3 {
+            color: #a78bfa; margin-bottom: 20px; font-size: 1.3em;
+            text-shadow: 0 2px 10px rgba(167, 139, 250, 0.3);
+        }
         .modal-input-wrapper input {
             width: 80%; font-size: 1.1em; padding: 12px; margin-bottom: 20px;
             border: 2px solid #475569; background: #334155; color: white;
             border-radius: 12px;
         }
-        .modal-btns { display: flex; justify-content: center; gap: 15px; }
-        .modal-btn { padding: 10px 25px; border-radius: 25px; border: none; font-weight: bold; cursor: pointer; color: white; }
-        .modal-btn-confirm { background: var(--accent-green); }
-        .modal-btn-cancel { background: #64748b; }
-
-        /* Cheat UI */
-        .cheat-btn {
-            position: absolute; bottom: 120px; left: 10px; z-index: 200;
-            background: #333; color: #888; border: 1px solid #555;
-            padding: 5px 10px; border-radius: 5px; cursor: pointer; font-size: 0.8em;
-            transition: 0.2s;
+        .modal-input-wrapper input:focus {
+            border-color: #facc15; box-shadow: 0 0 15px rgba(250, 204, 21, 0.3);
         }
-        .cheat-btn.active { background: #064e3b; color: #34d399; border-color: #34d399; box-shadow: 0 0 10px rgba(52, 211, 153, 0.5); }
-        .xray-display {
-            position: absolute; bottom: -60px; left: 50%; transform: translateX(-50%);
-            background: rgba(6, 78, 59, 0.9); border: 2px solid #34d399; color: #34d399;
-            padding: 5px 15px; border-radius: 8px; font-weight: bold; font-size: 0.9em;
-            white-space: nowrap; box-shadow: 0 0 15px rgba(52, 211, 153, 0.3);
-            pointer-events: none; opacity: 0; transition: opacity 0.3s;
+        .modal-btns {
+            display: flex; justify-content: center; gap: 15px;
         }
-        .xray-display.visible { opacity: 1; }
+        .modal-btn {
+            padding: 10px 25px; border-radius: 25px; border: none; font-weight: bold; cursor: pointer;
+            color: white; font-size: 1em; transition: 0.2s;
+        }
+        .modal-btn-confirm { background: var(--accent-green); box-shadow: 0 4px 0 #059669; }
+        .modal-btn-confirm:active { transform: translateY(4px); box-shadow: none; }
+        .modal-btn-cancel { background: #64748b; box-shadow: 0 4px 0 #475569; }
+        .modal-btn-cancel:active { transform: translateY(4px); box-shadow: none; }
 
+        /* 滾動條美化 */
         ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: rgba(0,0,0,0.1); }
         ::-webkit-scrollbar-thumb { background: #475569; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #64748b; }
+
+        /* ========== UNO 遊戲區 (李騙子桌遊風格) ========== */
+        :root {
+            --uno-card-w: 56px; /* 預設調小 */
+            --uno-card-h: 84px; /* 預設調小 */
+            --uno-red: #ef4444;
+            --uno-blue: #3b82f6;
+            --uno-green: #10b981;
+            --uno-yellow: #fbbf24;
+        }
+        #uno-wrapper {
+            background: radial-gradient(circle, #1e3a5f 0%, #0f172a 100%);
+            border: 8px solid #334155;
+            border-radius: 20px;
+            box-shadow: inset 0 0 60px rgba(0,0,0,0.6), 0 12px 30px rgba(0,0,0,0.5);
+            padding: 10px;
+            min-height: 520px;
+            display: flex;
+            flex-direction: column;
+        }
+        .uno-layout { display: flex; flex-direction: column; min-height: 480px; }
+        .uno-header {
+            display: flex; justify-content: space-between; align-items: center;
+            background: rgba(0,0,0,0.5); padding: 8px 15px; border-radius: 20px;
+            border: 1px solid rgba(255,255,255,0.1); margin-bottom: 10px;
+        }
+        .uno-room-info { font-size: 0.9rem; color: #cbd5e1; }
+        .uno-header-btns { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+        
+        .uno-table-area {
+            flex: 1; position: relative; display: flex; justify-content: center; align-items: center;
+            gap: 30px; perspective: 800px; min-height: 220px; 
+            padding: 50px 10px 30px 10px; 
+            box-sizing: border-box;
+        }
+        .uno-opponents-bar {
+            position: absolute; top: 10px; left: 0; right: 0;
+            display: flex; gap: 8px; justify-content: center; flex-wrap: wrap;
+            z-index: 10;
+        }
+        .uno-opponent-card {
+            background: rgba(0,0,0,0.6); border: 1px solid rgba(255,255,255,0.15);
+            border-radius: 10px; padding: 6px 12px; min-width: 60px;
+            display: flex; flex-direction: column; align-items: center; transition: 0.3s;
+        }
+        .uno-opponent-card.active { border-color: var(--uno-yellow); background: rgba(251, 191, 36, 0.2); transform: scale(1.05); }
+        .uno-opponent-card .opp-name { font-size: 0.7rem; color: #e2e8f0; max-width: 70px; overflow: hidden; text-overflow: ellipsis; }
+        .uno-opponent-card .opp-count { font-size: 1.1rem; font-weight: bold; color: #fff; }
+        .uno-direction-indicator {
+            position: absolute; width: 200px; height: 200px;
+            border: 2px dashed rgba(255,255,255,0.1); border-radius: 50%;
+            pointer-events: none; opacity: 0.25;
+            animation: unoSpin 10s linear infinite;
+        }
+        @keyframes unoSpin { 100% { transform: rotate(360deg); } }
+        .uno-pile {
+            width: var(--uno-card-w); height: var(--uno-card-h); border-radius: 10px;
+            position: relative; cursor: pointer; transition: transform 0.2s;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+            display: flex; justify-content: center; align-items: center; font-size: 0.85em; color: rgba(255,255,255,0.6);
+        }
+        .uno-deck {
+            background: repeating-linear-gradient(45deg, #334155, #334155 8px, #1e293b 8px, #1e293b 16px);
+            border: 2px solid #64748b;
+        }
+        .uno-discard { border: 2px dashed rgba(255,255,255,0.2); }
+        
+        #uno-center-message {
+            position: absolute; bottom: 10px; font-weight: bold; color: #facc15;
+            text-shadow: 0 2px 4px black; font-size: 14px;
+            background: rgba(0,0,0,0.6); padding: 5px 12px; border-radius: 20px;
+            z-index: 10;
+        }
+        .uno-bottom-section {
+            background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+            padding: 10px 0 15px 0; border-radius: 0 0 12px 12px;
+        }
+        .uno-controls { display: flex; gap: 15px; justify-content: center; margin-bottom: 5px; flex-wrap: wrap; }
+        .uno-controls .btn-game { min-width: 90px; padding: 10px 20px; font-size: 1em; }
+        .uno-controls .btn-game.btn-secondary { background: linear-gradient(to bottom, #475569, #334155); color: white; }
+        
+        .uno-hand-scroll {
+            display: flex; align-items: flex-end;
+            overflow-x: auto; padding: 45px 15px 20px 15px; min-height: 130px; gap: 0;
+            -webkit-overflow-scrolling: touch;
+        }
+        .uno-hand-scroll::before, .uno-hand-scroll::after {
+            content: ''; margin: auto;
+        }
+        
+        .uno-card {
+            width: var(--uno-card-w); height: var(--uno-card-h); border-radius: 8px;
+            position: relative; display: flex; justify-content: center; align-items: center;
+            box-shadow: -2px 0 6px rgba(0,0,0,0.4); border: 2px solid white;
+            user-select: none; transition: transform 0.2s; cursor: pointer;
+            flex-shrink: 0; margin-left: -28px; transform-origin: center bottom;
+        }
+        .uno-card:first-of-type { margin-left: 0 !important; }
+        .uno-card:hover { transform: translateY(-20px) scale(1.08); z-index: 50; box-shadow: 0 6px 18px rgba(0,0,0,0.5); }
+        .uno-card.selected { transform: translateY(-35px) scale(1.12); z-index: 49; border-color: var(--uno-yellow); box-shadow: 0 0 20px var(--uno-yellow); }
+        .uno-card.disabled { filter: grayscale(0.7) brightness(0.5); cursor: not-allowed; pointer-events: none; }
+        
+        /* == ✅ 這次修改的核心：修正卡牌中間數字不見的問題 == */
+        .uno-card .card-oval { 
+            width: 85%; height: 58%; background: white; 
+            border-radius: 50% / 45%; transform: rotate(-30deg); 
+            display: flex; align-items: center; justify-content: center; 
+            box-shadow: inset 0 0 5px rgba(0,0,0,0.2); 
+        }
+        .uno-card .card-symbol { 
+            font-family: 'Arial Black'; 
+            font-size: 2.2em; /* 稍微放大 */
+            transform: rotate(30deg); /* 抵銷外層的旋轉，讓數字直立擺正 */
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3); /* 加點立體感 */
+        }
+        /* 依據不同卡牌顏色給予中間數字對應的顏色 */
+        .uno-bg-red .card-symbol { color: var(--uno-red); }
+        .uno-bg-blue .card-symbol { color: var(--uno-blue); }
+        .uno-bg-green .card-symbol { color: var(--uno-green); }
+        .uno-bg-yellow .card-symbol { color: #d97706; /* 黃色在白底需要深一點點才清楚 */ }
+        .uno-bg-black .card-symbol, .uno-bg-wild .card-symbol { color: #1e293b; }
+        /* == 修改結束 == */
+
+        .uno-card .corner { position: absolute; font-family: 'Arial Black'; font-size: 0.85em; color: white; text-shadow: 1px 1px 2px black; }
+        .uno-card .tl { top: 3px; left: 5px; }
+        .uno-card .br { bottom: 3px; right: 5px; transform: rotate(180deg); }
+        .uno-bg-red { background: var(--uno-red); }
+        .uno-bg-blue { background: var(--uno-blue); }
+        .uno-bg-green { background: var(--uno-green); }
+        .uno-bg-yellow { background: var(--uno-yellow); }
+        .uno-bg-black { background: #1e293b; border-color: #64748b; }
+        .uno-bg-wild { background: conic-gradient(from 180deg, var(--uno-red) 0% 25%, var(--uno-blue) 25% 50%, var(--uno-green) 50% 75%, var(--uno-yellow) 75% 100%); color: black; }
+        .uno-tint-red { background: var(--uno-red) !important; }
+        .uno-tint-blue { background: var(--uno-blue) !important; }
+        .uno-tint-green { background: var(--uno-green) !important; }
+        .uno-tint-yellow { background: var(--uno-yellow) !important; }
+        .uno-color-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 15px; }
+        .uno-color-btn { height: 70px; border-radius: 12px; border: 3px solid white; cursor: pointer; transition: 0.2s; box-shadow: 0 4px 12px rgba(0,0,0,0.3); }
+        .uno-color-btn:hover { transform: scale(1.05); }
+        #uno-shout { animation: unoShoutPop 1.5s forwards; }
+        @keyframes unoShoutPop {
+            0% { transform: translate(-50%,-50%) scale(0); opacity: 0; }
+            20% { opacity: 1; }
+            60% { transform: translate(-50%,-50%) scale(1.2); opacity: 1; }
+            100% { transform: translate(-50%,-50%) scale(1); opacity: 0; }
+        }
+
+        /* 新增/修改：玩家列表的水平滾動 GUI */
+        .uno-opponents-bar, .opponents-row {
+            display: flex !important;
+            justify-content: flex-start !important;
+            gap: 12px;
+            width: 100%;
+            overflow-x: auto !important; 
+            flex-wrap: nowrap !important;
+            scroll-behavior: smooth;     
+            padding-bottom: 12px;        
+            box-sizing: border-box;
+        }
+
+        /* ========================================= */
+        /* --- 騙子作弊按鈕 (Liar Cheat Toggle) --- */
+        /* ========================================= */
+        #liar-cheat-btn {
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            z-index: 200;
+            padding: 3px 8px;
+            border-radius: 12px;
+            border: 1px solid rgba(255,255,255,0.2);
+            font-size: 0.65em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s;
+            letter-spacing: 0.5px;
+        }
+        #liar-cheat-btn.cheat-off {
+            background: rgba(30,30,30,0.7);
+            color: #94a3b8;
+        }
+        #liar-cheat-btn.cheat-on {
+            background: linear-gradient(135deg, #d97706, #ef4444);
+            color: #fff;
+            border-color: #fbbf24;
+            box-shadow: 0 0 10px rgba(251, 191, 36, 0.5);
+        }
+        #liar-cheat-reveal {
+            position: absolute;
+            bottom: 90px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0,0,0,0.85);
+            border: 1px solid rgba(251,191,36,0.5);
+            border-radius: 12px;
+            padding: 8px 16px;
+            font-size: 0.85em;
+            color: #fcd34d;
+            z-index: 100;
+            pointer-events: none;
+            text-align: center;
+            white-space: nowrap;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+        }
+
+        /* ========================================= */
+        /* --- UNO 編輯牌 Modal 樣式 --- */
+        /* ========================================= */
+        #uno-edit-modal .modal-box {
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        .uno-edit-type-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 6px;
+            margin: 8px 0;
+        }
+        .uno-edit-option {
+            padding: 8px 4px;
+            border-radius: 8px;
+            border: 2px solid transparent;
+            text-align: center;
+            cursor: pointer;
+            font-size: 0.85em;
+            font-weight: bold;
+            background: rgba(255,255,255,0.08);
+            color: #e2e8f0;
+            transition: all 0.15s;
+        }
+        .uno-edit-option:hover { background: rgba(255,255,255,0.18); }
+        .uno-edit-option.selected-edit { border-color: #fbbf24; background: rgba(251,191,36,0.2); }
+        .uno-edit-color-grid {
+            display: flex; gap: 10px; justify-content: center; margin: 10px 0;
+        }
+        .uno-edit-color-btn {
+            width: 42px; height: 42px; border-radius: 50%;
+            cursor: pointer; border: 3px solid transparent;
+            transition: all 0.15s;
+        }
+        .uno-edit-color-btn:hover { transform: scale(1.1); }
+        .uno-edit-color-btn.selected-color { border-color: #fff; box-shadow: 0 0 10px rgba(255,255,255,0.5); }
+        .uno-edit-section-label {
+            font-size: 0.8em; color: #94a3b8; margin: 10px 0 5px 0; text-align: left;
+        }
+
+        /* 滾動條美化 */
+        .uno-opponents-bar::-webkit-scrollbar, .opponents-row::-webkit-scrollbar {
+            height: 8px;
+        }
+        .uno-opponents-bar::-webkit-scrollbar-track, .opponents-row::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 4px;
+        }
+        .uno-opponents-bar::-webkit-scrollbar-thumb, .opponents-row::-webkit-scrollbar-thumb {
+            background: #6366f1;
+            border-radius: 4px;
+        }
+        .uno-opponents-bar::-webkit-scrollbar-thumb:hover, .opponents-row::-webkit-scrollbar-thumb:hover {
+            background: #a855f7;
+        }
+
     </style>
 </head>
 <body>
@@ -485,41 +775,84 @@
         <div class="stat-item">大廳閒置: <b id="lobbyCount">0</b></div>
         <div class="stat-item">遊戲中: <b id="inGameCount">0</b></div>
     </div>
+
     <div id="allRoomsContainer">搜尋中...</div>
     <hr style="border-color: rgba(255,255,255,0.1); margin: 20px 0;">
     <button class="menu-btn" onclick="showCreateRoom('ttt')">創立 圈圈叉叉 ⭕❌</button>
-    <button class="menu-btn btn-c4" onclick="showCreateRoom('c4')">創立 四連棋 (🔴🔵)</button>
+    <button class="menu-btn btn-c4" onclick="showCreateRoom('c4')">創立 四連棋 🔴🔵</button>
     <button class="menu-btn btn-liar" onclick="showCreateRoom('liar')">創立 騙子桌遊 🔫🃏</button>
+    <button class="menu-btn" style="background: linear-gradient(135deg, #f59e0b, #ef4444);" onclick="showCreateRoom('uno')">創立 UNO 🔄🃏</button>
+    <hr style="border: 0; height: 1px; background: rgba(255,255,255,0.2); margin: 15px 0;">
+    <button class="menu-btn" style="background: linear-gradient(135deg, #7A0000 0%, #4D0000 100%);" onclick="window.open('https://raymasla.github.io/chs/', '_blank')">
+    前往 西洋♖♘⚫</button>
+    <button class="menu-btn btn-purple" onclick="window.open('https://raymasla.github.io/whois/')">
+    前往 誰是臥底🕵️
+</button>
+    <button class="menu-btn" style="background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%);" onclick="window.open('https://raymasla.github.io/Yahtzee-online/', '_blank')">
+    前往 Yahtzee🎲</button>
+    <button class="menu-btn" style="background: linear-gradient(135deg, #0E452F 0%, #1F7D5C 100%);" onclick="window.open('https://raymasla.github.io/Html-21point-blackjack/', '_blank')">
+    前往 21點♠️♣️</button>
+    <button class="menu-btn" style="background: linear-gradient(to right, #0000FF 0%, #FF0000 100%); color: white; border: none; padding: 10px 25px; border-radius: 8px; font-weight: bold; cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.1);" onclick="window.open('https://reurl.cc/vkmlg1', '_blank')">
+    😁訂閱阿叡Game😎
+</button>
 </div>
 
 <div id="createRoomSection" class="container hidden">
     <h3 id="createTitle">創立房間</h3>
+    
     <div class="input-group"><label>房間名稱:</label><input type="text" id="roomName" placeholder="未命名房間"></div>
     <div class="input-group"><label>設定密碼:</label><input type="password" id="roomPass" placeholder="可留空"></div>
+
     <hr style="margin: 15px 0; border: 0; border-top: 1px solid rgba(255,255,255,0.1);">
     
     <div id="normalSettings">
         <div style="text-align: left; font-weight: bold; margin-bottom: 5px; color:#cbd5e1;">遊戲規則設定:</div>
         <div class="settings-row">
-            <div class="settings-item"><label>高</label><input type="number" id="inputRows" min="3" max="15" value="3"></div>
-            <div class="settings-item"><label>寬</label><input type="number" id="inputCols" min="3" max="15" value="3"></div>
-            <div class="settings-item"><label>連線數</label><input type="number" id="inputWin" min="3" max="10" value="3"></div>
+            <div class="settings-item">
+                <label>高 (Rows)</label>
+                <input type="number" id="inputRows" min="3" max="15" value="3">
+            </div>
+            <div class="settings-item">
+                <label>寬 (Cols)</label>
+                <input type="number" id="inputCols" min="3" max="15" value="3">
+            </div>
+            <div class="settings-item">
+                <label>連線數</label>
+                <input type="number" id="inputWin" min="3" max="10" value="3">
+            </div>
         </div>
-        <div id="infinite-hint" style="font-size: 0.85em; color: #a78bfa; margin-bottom: 10px; display:none;">※ 無限模式：只留3子</div>
+        <div id="infinite-hint" style="font-size: 0.85em; color: #a78bfa; margin-bottom: 10px; display:none; background: rgba(139, 92, 246, 0.1); padding: 8px; border-radius: 6px;">
+            ※ 無限模式：雙方最多 3 顆棋子，下第 4 顆最早的消失。
+        </div>
+    </div>
+
+    <div id="unoSettings" class="hidden" style="text-align: left; font-size: 0.9em; padding:15px; border-radius:8px; margin:15px 0; background: rgba(245, 158, 11, 0.1); border: 1px solid rgba(245, 158, 11, 0.3); border-left: 5px solid #f59e0b;">
+        <h4 style="margin:0 0 8px 0; color:#fbbf24;">🃏 UNO 規則設定</h4>
+        <label style="display:block; margin:8px 0;"><input type="checkbox" id="uno-rule-chain" style="margin-right:6px;"> 連出 (Chain)</label>
+        <label style="display:block; margin:8px 0;"><input type="checkbox" id="uno-rule-stack" style="margin-right:6px;"> 疊加 (Stack +2/+4)</label>
+        <div class="input-group" style="margin-top:10px;"><label>初始手牌張數:</label><input type="number" id="uno-initialHandSize" min="1" max="20" value="7" style="width:80px;"></div>
     </div>
 
     <div id="liarSettings" class="hidden" style="text-align: left; font-size: 0.9em; padding:15px; border-radius:8px; margin:15px 0;">
         <h4 style="margin:0 0 5px 0;">🔫 騙子酒館規則：</h4>
-        1. 牌庫: A,Q,K(各6)+Joker(2)。<br>
-        2. 系統指定目標(如King)，必須出牌並宣稱。<br>
-        3. 懷疑上家說謊按 <b style="color:#ef4444">LIAR!</b>。<br>
-        4. <b>沒牌時</b>: 若剩餘2人，強制抓謊。<br>
-        5. 1/6 機率實彈死亡。<br>
-        6. <b style="color:#60a5fa">斷線保護</b>: 離開後暱稱保留，輸入同名可重連。
+        1. 牌庫含 A, Q, K (各6張) + Joker (2張)。<br>
+        2. 系統指定目標 (如 King)，玩家必須出牌並宣稱符合。<br>
+        3. 若懷疑上家說謊，可按下 <b style="color:#ef4444">LIAR!</b> 抓謊。<br>
+        4. <b>抓對了</b>：說謊者接受左輪制裁；<b>抓錯了</b>：抓人者接受制裁。<br>
+        5. <b>出完牌</b>：3人以上時，安全上岸 (跳過回合)；若剩兩人時上家出完牌，下家必須強制抓謊。<br>
+        6. 1/6 機率觸發實彈，死亡淘汰。<br>
+        7. <b style="color:#facc15">多人模式(5人+)</b>: 牌庫自動擴充至 8組 A,Q,K + 4 Joker。<br>
+        8. <b style="color:#60a5fa">斷線保護</b>: 離開房間後，暱稱與遊戲進度將保留，重新輸入同名即可回到座位。<br>
+        
+        <label style="display:block; margin-top:10px; color:#facc15; font-weight:bold; cursor:pointer; padding:5px; border:1px dashed rgba(250, 204, 21, 0.5); border-radius:5px;">
+            <input type="checkbox" id="checkAnytimeLiar" style="width:auto; vertical-align:middle; margin-right:5px;">
+            🔓 開啟「隨時抓謊」模式 (所有人皆可抓謊)
+        </label>
     </div>
 
     <button id="btn-confirm" class="menu-btn" onclick="createRoom()">確認創立</button>
-    <button id="btn-infinite" class="menu-btn btn-purple hidden" onclick="createInfiniteRoom()">創立 無限圈圈叉叉</button>
+    <button id="btn-infinite" class="menu-btn btn-purple hidden" onclick="createInfiniteRoom()">創立 無限圈圈叉叉 (只留三子)</button>
+    
     <button class="btn-sm" style="background:transparent; border:1px solid #64748b; margin-top:10px; color:#cbd5e1;" onclick="showSection('mainMenu')">返回大廳</button>
 </div>
 
@@ -530,20 +863,22 @@
     </div>
     <div id="gameMetaInfo" style="font-size: 0.85em; color: #94a3b8; margin-bottom: 10px;"></div>
     
-    <div id="status" style="font-weight: bold; color: #f87171; margin: 10px 0; font-size: 1.1em;">載入中...</div>
+    <div id="status" style="font-weight: bold; color: #f87171; margin: 10px 0; font-size: 1.1em; text-shadow: 0 0 10px rgba(248, 113, 113, 0.3);">載入中...</div>
+    
     <div id="floating-chat-zone" class="floating-chat-container"></div>
 
     <div id="ttt-board" class="hidden"></div>
     <div id="c4-game-wrapper" class="hidden">
         <div class="color-pickers" style="margin-bottom: 10px; font-size: 0.9em; color: #cbd5e1;">
-            <label>P1色: <input type="color" id="p1ColorPicker" value="#f87171"></label>
-            <label style="margin-left:15px;">P2色: <input type="color" id="p2ColorPicker" value="#facc15"></label>
+            <label class="color-label">P1色: <input type="color" id="p1ColorPicker" value="#f87171" style="padding:0; width:30px; height:30px; border:none; vertical-align:middle;"></label>
+            <label class="color-label" style="margin-left:15px;">P2色: <input type="color" id="p2ColorPicker" value="#facc15" style="padding:0; width:30px; height:30px; border:none; vertical-align:middle;"></label>
         </div>
         <div id="c4-board" class="c4-board"></div>
     </div>
 
     <div id="liar-wrapper" class="hidden">
-        <button id="btn-cheat-toggle" class="cheat-btn" onclick="toggleCheat()">OFF</button>
+        <button id="liar-cheat-btn" class="cheat-off" onclick="toggleLiarCheat()">OFF</button>
+        <div id="liar-cheat-reveal" style="display:none;"></div>
         <div class="liar-header">
             <span id="liar-status-text" style="font-size:0.9em; font-weight:bold;">等待玩家...</span>
             <div id="liar-target-display" class="target-card-display hidden">K</div>
@@ -552,13 +887,14 @@
         <div class="opponents-row" id="liar-opponents"></div>
 
         <div class="liar-table-center">
-            <div id="last-move-info" style="margin-bottom: 10px; font-size:1.1em; color:#fff; background:#ea580c; padding:6px 20px; border-radius:20px; box-shadow: 0 4px 10px rgba(234, 88, 12, 0.5); z-index: 10; font-weight: bold; display:none;"></div>
+            <div id="last-move-info" style="margin-bottom: 10px; font-size:1.1em; color:#fff; background:#ea580c; padding:6px 20px; border-radius:20px; box-shadow: 0 4px 10px rgba(234, 88, 12, 0.5); z-index: 10; font-weight: bold;"></div>
+            
             <div id="liar-stack-area" style="position:relative; width:60px; height:90px; border: 2px dashed rgba(255,255,255,0.2); border-radius:6px;">
-                <div id="xray-display" class="xray-display"></div>
             </div>
         </div>
         
         <div id="my-gun-status" class="my-gun-status hidden"></div>
+
         <div class="my-hand-area" id="liar-my-hand"></div>
         
         <div class="liar-controls" id="liar-controls">
@@ -585,11 +921,131 @@
         </div>
     </div>
 
+    <div id="uno-wrapper" class="hidden" style="position:relative;">
+        <div class="uno-layout">
+            <div class="uno-header">
+                <div class="uno-room-info">
+                    <span id="uno-room-name">Room</span> | <span id="uno-rules-display">Rules</span>
+                </div>
+                <div class="uno-header-btns">
+                    <span id="uno-turn-status">等待開始...</span>
+                    <button class="btn-sm btn-green" style="margin-left:8px;" onclick="openUnoSettings()">⚙️ 設定</button>
+                </div>
+            </div>
+            <div class="uno-table-area">
+                <div class="uno-opponents-bar" id="uno-opponents-container"></div>
+                <div class="uno-direction-indicator" id="uno-dir-indicator"></div>
+                <div class="uno-pile uno-deck" id="uno-deck" onclick="unoDrawCardClick()">
+                    <div>UNO<br><small>抽牌</small></div>
+                </div>
+                <div class="uno-pile uno-discard" id="uno-discard-pile"></div>
+                <div id="uno-center-message"></div>
+            </div>
+            <div class="uno-bottom-section">
+                <div class="uno-controls" id="uno-controls-area">
+                    <button id="uno-btn-start" class="btn-game btn-green hidden" onclick="unoStartGame()">開始遊戲</button>
+                    <button id="uno-btn-pass" class="btn-game btn-secondary hidden" onclick="unoPassTurn()">抽牌</button>
+                    <button id="uno-btn-play" class="btn-game btn-play hidden" onclick="unoPlaySelected()">出牌</button>
+                    <button id="uno-btn-edit" class="btn-game btn-secondary" onclick="openUnoEditModal()" style="background:linear-gradient(135deg,#7c3aed,#6d28d9);">編輯</button>
+                </div>
+                <div class="uno-hand-scroll" id="uno-my-hand"></div>
+            </div>
+        </div>
+        <div id="uno-settings-modal" class="modal-overlay hidden">
+            <div class="modal-box">
+                <h3>⚙️ UNO 設定</h3>
+                <div style="text-align:left; margin-bottom:15px;">
+                    <label style="color:#cbd5e1;">更改暱稱</label>
+                    <div style="display:flex; gap:10px; margin-top:5px;">
+                        <input type="text" id="uno-setting-nickname" maxlength="10" style="flex:1;">
+                        <button class="btn-sm btn-green" onclick="updateUnoNickname()">儲存</button>
+                    </div>
+                </div>
+                <div style="text-align:left; margin-bottom:15px;">
+                    <label style="color:#cbd5e1;">畫面縮放 (卡牌大小)</label>
+                    <input type="range" id="uno-setting-scale" min="0.6" max="1.5" step="0.1" value="0.8" style="width:100%; accent-color:#8b5cf6;" oninput="updateUnoScale(this.value)">
+                </div>
+                <button class="btn-sm" style="background:#475569; color:white;" onclick="closeUnoSettings()">關閉</button>
+            </div>
+        </div>
+        <div id="uno-draw-modal" class="modal-overlay hidden">
+            <div class="modal-box">
+                <h3>你抽到了</h3>
+                <div id="uno-drawn-card-placeholder" style="display:flex; justify-content:center; margin:15px 0;"></div>
+                <p id="uno-draw-msg" style="color:#94a3b8; font-size:0.9em;"></p>
+                <div id="uno-draw-actions" style="display:flex; gap:10px; justify-content:center;"></div>
+            </div>
+        </div>
+        <div id="uno-color-modal" class="modal-overlay hidden">
+            <div class="modal-box">
+                <h3>選擇顏色</h3>
+                <div class="uno-color-grid">
+                    <div class="uno-color-btn uno-bg-red" onclick="unoSelectWildColor('red')"></div>
+                    <div class="uno-color-btn uno-bg-blue" onclick="unoSelectWildColor('blue')"></div>
+                    <div class="uno-color-btn uno-bg-green" onclick="unoSelectWildColor('green')"></div>
+                    <div class="uno-color-btn uno-bg-yellow" onclick="unoSelectWildColor('yellow')"></div>
+                </div>
+            </div>
+        </div>
+        <div id="uno-shout" style="position:fixed; top:50%; left:50%; transform:translate(-50%,-50%); font-size:6em; font-weight:900; color:#fbbf24; text-shadow:4px 4px 0 #ef4444; z-index:3000; pointer-events:none; opacity:0;">UNO!</div>
+
+        <!-- UNO 編輯牌 Modal -->
+        <div id="uno-edit-modal" class="modal-overlay hidden">
+            <div class="modal-box" style="max-width:340px;">
+                <h3>✏️ 編輯手牌</h3>
+                <p id="uno-edit-hint" style="color:#94a3b8; font-size:0.85em; margin-top:-8px;">請先在手牌區點選一張牌，再點此按鈕</p>
+
+                <div id="uno-edit-body" class="hidden">
+                    <div class="uno-edit-section-label">選擇顏色</div>
+                    <div class="uno-edit-color-grid">
+                        <div class="uno-edit-color-btn uno-bg-red" data-color="red" onclick="unoEditSelectColor('red')"></div>
+                        <div class="uno-edit-color-btn uno-bg-blue" data-color="blue" onclick="unoEditSelectColor('blue')"></div>
+                        <div class="uno-edit-color-btn uno-bg-green" data-color="green" onclick="unoEditSelectColor('green')"></div>
+                        <div class="uno-edit-color-btn uno-bg-yellow" data-color="yellow" onclick="unoEditSelectColor('yellow')"></div>
+                        <div class="uno-edit-color-btn uno-bg-wild" data-color="black" onclick="unoEditSelectColor('black')" style="width:42px;height:42px;border-radius:50%;background:conic-gradient(#ef4444 0% 25%,#3b82f6 25% 50%,#10b981 50% 75%,#f59e0b 75% 100%);"></div>
+                    </div>
+
+                    <div class="uno-edit-section-label">選擇牌型 (數字 / 功能牌)</div>
+                    <div class="uno-edit-type-grid" id="uno-edit-normal-types">
+                        <div class="uno-edit-option" data-value="0" data-type="n" onclick="unoEditSelectType('n','0')">0</div>
+                        <div class="uno-edit-option" data-value="1" data-type="n" onclick="unoEditSelectType('n','1')">1</div>
+                        <div class="uno-edit-option" data-value="2" data-type="n" onclick="unoEditSelectType('n','2')">2</div>
+                        <div class="uno-edit-option" data-value="3" data-type="n" onclick="unoEditSelectType('n','3')">3</div>
+                        <div class="uno-edit-option" data-value="4" data-type="n" onclick="unoEditSelectType('n','4')">4</div>
+                        <div class="uno-edit-option" data-value="5" data-type="n" onclick="unoEditSelectType('n','5')">5</div>
+                        <div class="uno-edit-option" data-value="6" data-type="n" onclick="unoEditSelectType('n','6')">6</div>
+                        <div class="uno-edit-option" data-value="7" data-type="n" onclick="unoEditSelectType('n','7')">7</div>
+                        <div class="uno-edit-option" data-value="8" data-type="n" onclick="unoEditSelectType('n','8')">8</div>
+                        <div class="uno-edit-option" data-value="9" data-type="n" onclick="unoEditSelectType('n','9')">9</div>
+                        <div class="uno-edit-option" data-value="skip" data-type="skip" onclick="unoEditSelectType('skip','skip')">⊘ 禁止</div>
+                        <div class="uno-edit-option" data-value="reverse" data-type="reverse" onclick="unoEditSelectType('reverse','reverse')">⇄ 迴轉</div>
+                        <div class="uno-edit-option" data-value="draw2" data-type="draw2" onclick="unoEditSelectType('draw2','draw2')">+2</div>
+                    </div>
+
+                    <div class="uno-edit-section-label">萬用牌（顏色自動設為黑色）</div>
+                    <div class="uno-edit-type-grid">
+                        <div class="uno-edit-option" data-value="wild" data-type="wild" onclick="unoEditSelectType('wild','wild')" style="grid-column: span 2;">⊕ 變色牌</div>
+                        <div class="uno-edit-option" data-value="wild4" data-type="wild4" onclick="unoEditSelectType('wild4','wild4')" style="grid-column: span 2;">+4 彩色</div>
+                    </div>
+
+                    <div style="margin-top:16px; display:flex; gap:10px; justify-content:center;">
+                        <button class="btn-sm btn-green" onclick="unoEditConfirm()">確認更換</button>
+                        <button class="btn-sm" style="background:#475569; color:white;" onclick="closeUnoEditModal()">取消</button>
+                    </div>
+                </div>
+
+                <div id="uno-edit-no-select" class="">
+                    <button class="btn-sm" style="background:#475569; color:white; margin-top:10px;" onclick="closeUnoEditModal()">關閉</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <button id="btn-undo" class="btn-undo" onclick="undoStep()">⬅ 悔棋 (Undo)</button>
 
     <div id="chat-area">
         <div style="margin-bottom: 8px; font-size: 0.9em; color: var(--text-muted);">
-            我是: <span id="myNameDisplay" class="editable-name" onclick="editName()">玩家</span>
+            我是: <span id="myNameDisplay" class="editable-name" onclick="editName()">玩家</span> ✎
         </div>
         <div id="chat-msgs"></div>
         <div class="chat-input-group">
@@ -597,6 +1053,7 @@
             <button onclick="sendMessage()">傳送</button>
         </div>
     </div>
+
     <div style="margin-top: 25px;">
         <button id="btn-restart-gen" style="background:transparent; color:#64748b; border:1px solid #334155; padding:8px 20px; border-radius:20px; cursor:pointer;" onclick="resetGame()">重置遊戲</button>
     </div>
@@ -637,14 +1094,40 @@
     let currentRoomId = null, selectedGameType = 'ttt', roomDataCache = null;
     let currentUserKey = null;
     let isLiarGame = false; 
-    let isCheatEnabled = false;
+    
     let selectedLiarCards = []; 
     let isAnimating = false;
     let processingAction = false; 
-    let chatInitTimestamp = Date.now(); 
+    let chatInitTimestamp = Date.now();
+
+    // UNO 遊戲狀態
+    let unoSelectedIndices = [];
+    let unoIsProcessing = false;
+    let unoPendingDrawnCard = null;
+    let unoPendingPlayCards = null;
+    let unoLastHandsCount = {};
+    let unoLastRenderedAction = "";
+    let unoCenterMsgTimeoutId = null;
+    let unoShowGameMsg = true; 
+
+    // --- UNO 取得下一個仍在遊戲中（未完成）玩家的 Helper 函數 ---
+    function getUnoNextActiveIndex(data, startIdx, dir, steps, tempFinishedList = null) {
+        let finished = tempFinishedList || data.finishedPlayers || [];
+        let total = data.playerOrder.length;
+        if (total - finished.length <= 1 && finished.length > 0) return startIdx;
+        let curr = startIdx;
+        let taken = 0;
+        while(taken < steps) {
+            curr = (curr + dir) % total;
+            if (curr < 0) curr += total;
+            if (!finished.includes(data.playerOrder[curr])) taken++;
+        }
+        return curr;
+    }
+
+    // --- 玩家名稱初始化 (Sequence 1~99) ---
     let myName = localStorage.getItem('playerName');
 
-    // --- 初始化 ---
     async function initializePlayerName() {
         if (!myName) {
             const seqRef = ref(db, 'ongame_global/player_seq');
@@ -653,74 +1136,151 @@
                     if (currentSeq === null || currentSeq >= 99) return 1;
                     return currentSeq + 1;
                 });
+
                 if (result.committed) {
-                    myName = `匿名玩家${result.snapshot.val()}`;
+                    const num = result.snapshot.val();
+                    myName = `匿名玩家${num}`;
                     localStorage.setItem('playerName', myName);
                 } else {
                     myName = "匿名玩家" + Math.floor(Math.random()*99+1); 
                 }
             } catch (error) {
+                console.error("Name transaction failed", error);
                 myName = "匿名玩家" + Math.floor(Math.random()*99+1);
             }
         }
         document.getElementById('myNameDisplay').innerText = myName;
     }
+
     initializePlayerName();
 
+    // --- 全站線上人數統計 ---
     const onlineRef = push(ref(db, 'online'));
     onDisconnect(onlineRef).remove();
     set(onlineRef, true);
 
     let totalOnlineCount = 0;
     onValue(ref(db, 'online'), (snapshot) => {
-        totalOnlineCount = snapshot.val() ? Object.keys(snapshot.val()).length : 0;
+        const val = snapshot.val();
+        totalOnlineCount = val ? Object.keys(val).length : 0;
         updateStatsUI();
     });
 
+    // --- 初始化：顯示所有房間（包含 ongame_room + chsgame_room） ---
     let totalInGameCount = 0;
-    onValue(ref(db, 'ongame_room'), (snapshot) => {
+    let ongameRooms = null;
+    let chsRooms = null;
+
+    function renderAllRooms() {
         const container = document.getElementById('allRoomsContainer');
+        if (!container) return;
         container.innerHTML = "";
-        const rooms = snapshot.val();
         totalInGameCount = 0;
 
-        if (!rooms) { 
-            container.innerHTML = "<p style='color:#94a3b8; margin-top:20px;'>目前沒有房間，來開一個吧！</p>"; 
-            updateStatsUI(); return; 
+        const hasOngame = ongameRooms && Object.keys(ongameRooms).length > 0;
+        const hasChs = chsRooms && Object.keys(chsRooms).length > 0;
+
+        if (!hasOngame && !hasChs) {
+            container.innerHTML = "<p style='color:#94a3b8; margin-top:20px;'>目前沒有房間，來開一個吧！</p>";
+            updateStatsUI();
+            return;
         }
-        
-        Object.entries(rooms).reverse().forEach(([id, r]) => {
-            let userCount = r.users ? Object.values(r.users).filter(u => u.status !== 'offline').length : 0;
-            totalInGameCount += userCount;
 
-            let typeName = '❌一般圈叉';
-            if (r.type === 'c4') typeName = '🔵重力四連';
-            if (r.type === 'ttt-infinite') typeName = '♾️無限圈叉';
-            if (r.type === 'liar') typeName = '🔫騙子桌遊';
+        // 原本的 ongame_room 房間
+        if (hasOngame) {
+            Object.entries(ongameRooms).reverse().forEach(([id, r]) => {
+                let userCount = 0;
+                if (r.users) {
+                    if (r.type === 'uno') userCount = Object.values(r.users).filter(u => u.online).length;
+                    else userCount = Object.values(r.users).filter(u => u.status !== 'offline').length;
+                }
+                totalInGameCount += userCount;
 
-            const hasPass = r.password && r.password !== "";
-            const lockIcon = hasPass ? '<span class="lock-icon">🔒</span>' : '';
-            const passwordArg = hasPass ? r.password : ""; 
-            
-            let statusBadge = '<span class="status-badge status-wait">等待中</span>';
-            if (r.status === 'playing' || (r.turn > 0 && r.type !== 'liar')) {
-                statusBadge = '<span class="status-badge status-play">遊戲中</span>';
-            }
+                let typeName = '❌一般圈叉';
+                if (r.type === 'c4') typeName = '🔵重力四連';
+                if (r.type === 'ttt-infinite') typeName = '♾️無限圈叉';
+                if (r.type === 'liar') typeName = '🔫騙子桌遊';
+                if (r.type === 'uno') typeName = '🃏 UNO';
 
-            const div = document.createElement('div');
-            div.className = 'room-item';
-            div.innerHTML = `
-                <div class="room-info">
-                    <span class="room-name">${typeName} | ${r.name} ${lockIcon} ${statusBadge}</span>
-                    <div class="room-meta">人數: ${userCount}</div>
-                </div>
-                <div>
-                    <button class="btn-sm btn-green" onclick="attemptJoin('${id}', '${passwordArg}')">加入</button>
-                    <button class="btn-sm btn-red" onclick="deleteRoom('${id}')">刪除</button>
-                </div>`;
-            container.appendChild(div);
-        });
+                const hasPass = r.password && r.password !== "";
+                const lockIcon = hasPass ? '<span class="lock-icon">🔒</span>' : '';
+                const passwordArg = hasPass ? r.password : ""; 
+                
+                let statusBadge = '<span class="status-badge status-wait">等待中</span>';
+                if (r.status === 'playing' || (r.turn > 0 && r.type !== 'liar') || (r.type === 'uno' && r.gameState === 'playing')) {
+                    statusBadge = '<span class="status-badge status-play">遊戲中</span>';
+                }
+
+                let metaInfo = "";
+                if (r.type === 'liar') {
+                    metaInfo = `人數: ${userCount}`;
+                    if (r.anytimeLiar) metaInfo += ` | 隨時抓謊ON`;
+                } else if (r.type === 'uno') {
+                    metaInfo = `人數: ${userCount}`;
+                    if (r.settings) metaInfo += ` | 連出:${r.settings.chain?'ON':'OFF'} 疊加:${r.settings.stack?'ON':'OFF'}`;
+                } else {
+                    const rows = r.rows || 3;
+                    const cols = r.cols || 3;
+                    metaInfo = `大小: ${rows}x${cols} | 人數: ${userCount}`;
+                }
+
+                const div = document.createElement('div');
+                div.className = 'room-item';
+                div.innerHTML = `
+                    <div class="room-info">
+                        <span class="room-name">${typeName} | ${r.name} ${lockIcon} ${statusBadge}</span>
+                        <div class="room-meta">${metaInfo}</div>
+                    </div>
+                    <div>
+                        <button class="btn-sm btn-green" onclick="attemptJoin('${id}', '${passwordArg}')">加入</button>
+                        <button class="btn-sm btn-red" onclick="deleteRoom('${id}')">刪除</button>
+                    </div>`;
+                container.appendChild(div);
+            });
+        }
+
+        // 新增的 chsgame_room 房間（點加入後前往外部棋類大廳）
+        if (hasChs) {
+            Object.entries(chsRooms).reverse().forEach(([id, r]) => {
+                let userCount = 0;
+                if (r.users) {
+                    userCount = Object.values(r.users).filter(u => u.status !== 'offline').length;
+                }
+                totalInGameCount += userCount;
+
+                const hasPass = r.password && r.password !== "";
+                const lockIcon = hasPass ? '<span class="lock-icon">🔒</span>' : '';
+                const passwordArg = hasPass ? r.password : "";
+
+                const typeName = '♟️西洋棋 & 跳棋';
+                const statusBadge = '<span class="status-badge status-wait">等待中</span>';
+                const metaInfo = `人數: ${userCount}`;
+
+                const div = document.createElement('div');
+                div.className = 'room-item';
+                div.innerHTML = `
+                    <div class="room-info">
+                        <span class="room-name">${typeName} | ${r.name || '房間'} ${lockIcon} ${statusBadge}</span>
+                        <div class="room-meta">${metaInfo}</div>
+                    </div>
+                    <div>
+                        <button class="btn-sm btn-green" onclick="joinChsRoom('${id}', '${passwordArg}')">加入</button>
+                    </div>`;
+                container.appendChild(div);
+            });
+        }
+
         updateStatsUI();
+    }
+
+    onValue(ref(db, 'ongame_room'), (snapshot) => {
+        ongameRooms = snapshot.val() || {};
+        renderAllRooms();
+    });
+
+    onValue(ref(db, 'chsgame_room'), (snapshot) => {
+        chsRooms = snapshot.val() || {};
+        renderAllRooms();
     });
 
     function updateStatsUI() {
@@ -729,12 +1289,13 @@
         document.getElementById('lobbyCount').innerText = lobbyCount;
     }
 
-    window.toggleCheat = () => {
-        isCheatEnabled = !isCheatEnabled;
-        const btn = document.getElementById('btn-cheat-toggle');
-        btn.innerText = isCheatEnabled ? "ON" : "OFF";
-        btn.classList.toggle('active', isCheatEnabled);
-        if (roomDataCache && roomDataCache.type === 'liar') renderLiarGame(roomDataCache);
+    // chsgame_room 房間加入：開啟外部棋類大廳網址
+    window.joinChsRoom = (id, correctPass) => {
+        if (correctPass && correctPass !== "undefined" && correctPass !== "") {
+            const input = prompt("此房間有密碼，請輸入：");
+            if (input !== correctPass) { alert("密碼錯誤！"); return; }
+        }
+        window.open('https://raymasla.github.io/chs/', '_blank');
     };
 
     window.attemptJoin = async (id, correctPass) => {
@@ -742,62 +1303,118 @@
             const input = prompt("此房間有密碼，請輸入：");
             if (input !== correctPass) { alert("密碼錯誤！"); return; }
         }
+
         const roomSnapshot = await get(ref(db, `ongame_room/${id}`));
         const roomData = roomSnapshot.val();
-        if (roomData && roomData.type === 'liar') handleLiarJoin(id, roomData);
-        else enterRoom(id);
+        
+        if (roomData && roomData.type === 'liar') {
+            handleLiarJoin(id, roomData);
+        } else if (roomData && roomData.type === 'uno') {
+            handleUnoJoin(id, roomData);
+        } else {
+            enterRoom(id);
+        }
     };
 
-    // --- Liar Join Logic ---
-    let pendingRoomId = null, pendingRoomData = null;
+    let pendingRoomId = null;
+    let pendingRoomData = null;
+
     window.handleLiarJoin = (id, roomData) => {
-        pendingRoomId = id; pendingRoomData = roomData;
+        pendingRoomId = id;
+        pendingRoomData = roomData;
         document.getElementById('modalNameInput').value = myName;
+        document.getElementById('modalTitle').innerText = "👇輸入暱稱開始遊戲！👇";
         document.getElementById('customNameModal').classList.remove('hidden');
         document.getElementById('modalNameInput').focus();
     };
 
-    window.closeNameModal = () => document.getElementById('customNameModal').classList.add('hidden');
+    window.handleUnoJoin = (id, roomData) => {
+        pendingRoomId = id;
+        pendingRoomData = roomData;
+        document.getElementById('modalNameInput').value = myName;
+        document.getElementById('modalTitle').innerText = "👇輸入暱稱進入 UNO 房間👇";
+        document.getElementById('customNameModal').classList.remove('hidden');
+        document.getElementById('modalNameInput').focus();
+    };
+
+    window.closeNameModal = () => {
+        document.getElementById('customNameModal').classList.add('hidden');
+        pendingRoomId = null;
+        pendingRoomData = null;
+    };
+
     window.submitNameModal = () => {
-        let inputName = document.getElementById('modalNameInput').value.trim();
-        if (!inputName) return;
+        let inputName = document.getElementById('modalNameInput').value;
+        if (!inputName || inputName.trim() === "") return;
+        inputName = inputName.trim();
+
         const users = pendingRoomData.users || {};
-        let existingKey = null, isOnline = false;
+        let existingKey = null;
+        let isOnline = false;
 
         for (const [key, user] of Object.entries(users)) {
             if (user.name === inputName) {
                 existingKey = key;
-                if (user.status !== 'offline') isOnline = true;
+                if (pendingRoomData.type === 'uno') {
+                    if (user.online) isOnline = true;
+                } else {
+                    if (user.status !== 'offline') isOnline = true;
+                }
                 break;
             }
         }
+
         if (existingKey && isOnline) {
-            document.getElementById('modalTitle').innerText = "名字重複，請換一個:";
+            const title = document.getElementById('modalTitle');
+            title.innerText = "痾ㄛ..好像有重複的名字 請重新輸入:>";
+            const box = document.querySelector('.modal-box');
+            box.classList.remove('shaking');
+            void box.offsetWidth; 
+            box.classList.add('shaking');
             return; 
         }
+
+        const targetRoomId = pendingRoomId;
         closeNameModal();
-        myName = inputName;
-        localStorage.setItem('playerName', myName);
-        enterRoom(pendingRoomId, existingKey);
+
+        if (existingKey) {
+            myName = inputName;
+            localStorage.setItem('playerName', myName);
+            enterRoom(targetRoomId, existingKey);
+        } else {
+            myName = inputName;
+            localStorage.setItem('playerName', myName);
+            enterRoom(targetRoomId, null);
+        }
     };
 
-    // --- 房間創建與進入 ---
     window.showCreateRoom = (type) => {
         selectedGameType = type;
         const btnInfinite = document.getElementById('btn-infinite');
         const btnConfirm = document.getElementById('btn-confirm');
         const normalSettings = document.getElementById('normalSettings');
         const liarSettings = document.getElementById('liarSettings');
+        const unoSettings = document.getElementById('unoSettings');
         
+        let title = "創立房間";
+        document.getElementById('createTitle').innerText = title;
+
         btnInfinite.classList.add('hidden');
         normalSettings.classList.remove('hidden');
         liarSettings.classList.add('hidden');
+        if (unoSettings) unoSettings.classList.add('hidden');
         
         if (type === 'liar') {
-            document.getElementById('createTitle').innerText = "創立 騙子桌遊";
+            document.getElementById('createTitle').innerText = "創立 騙子桌遊 (Liar's Deck)";
             normalSettings.classList.add('hidden');
             liarSettings.classList.remove('hidden');
             btnConfirm.innerText = "創立 賭局";
+            btnConfirm.onclick = createRoom;
+        } else if (type === 'uno') {
+            document.getElementById('createTitle').innerText = "創立 UNO 房間";
+            normalSettings.classList.add('hidden');
+            if (unoSettings) unoSettings.classList.remove('hidden');
+            btnConfirm.innerText = "創立 UNO 房間";
             btnConfirm.onclick = createRoom;
         } else if (type === 'c4') {
             document.getElementById('createTitle').innerText = '創立 四連棋';
@@ -819,24 +1436,69 @@
     };
 
     window.createInfiniteRoom = () => { selectedGameType = 'ttt-infinite'; createRoom(); };
+
     window.createRoom = () => {
         const name = document.getElementById('roomName').value || "好玩房間";
         const pass = document.getElementById('roomPass').value;
         const roomRef = push(ref(db, 'ongame_room'));
         
         let roomData = { name, password: pass, type: selectedGameType, users: {}, status: 'waiting', chat: {} };
+
         if (selectedGameType === 'liar') {
-            roomData = { ...roomData, gameState: 'waiting', deck: [], stack: [], hands: {}, guns: {} };
+            const anytimeLiar = document.getElementById('checkAnytimeLiar').checked;
+            roomData = { 
+                ...roomData, 
+                gameState: 'waiting', 
+                deck: [], 
+                stack: [], 
+                hands: {}, 
+                guns: {},
+                anytimeLiar: anytimeLiar 
+            };
+        } else if (selectedGameType === 'uno') {
+            const chain = document.getElementById('uno-rule-chain') && document.getElementById('uno-rule-chain').checked;
+            const stack = document.getElementById('uno-rule-stack') && document.getElementById('uno-rule-stack').checked;
+            const initialHandSize = parseInt((document.getElementById('uno-initialHandSize') && document.getElementById('uno-initialHandSize').value) || 7) || 7;
+            roomData = {
+                ...roomData,
+                type: 'uno',
+                gameState: 'waiting',
+                settings: { chain: !!chain, stack: !!stack },
+                initialHandSize,
+                users: {},
+                turnIndex: 0,
+                direction: 1,
+                accumulatedDraw: 0,
+                currentColor: 'red',
+                deck: [],
+                discardPile: [],
+                lastAction: ''
+            };
         } else {
             let rows = parseInt(document.getElementById('inputRows').value) || 3;
             let cols = parseInt(document.getElementById('inputCols').value) || 3;
             let win = parseInt(document.getElementById('inputWin').value) || 3;
+            if(rows < 3) rows = 3; if(cols < 3) cols = 3; if(win < 3) win = 3;
+            
             const initBoard = selectedGameType === 'c4' ? Array(rows * cols).fill(0) : Array(rows * cols).fill("");
-            roomData = { ...roomData, board: initBoard, turn: 0, rows, cols, winCondition: win, history: [initBoard], moves: [] };
+            
+            roomData = {
+                ...roomData,
+                board: initBoard, turn: 0, 
+                rows: rows, cols: cols, winCondition: win,
+                history: selectedGameType === 'ttt-infinite' ? [{board:initBoard, moves:[]}] : [initBoard],
+                moves: selectedGameType === 'ttt-infinite' ? [] : null
+            };
         }
+
         set(roomRef, roomData).then(() => {
-            if (selectedGameType === 'liar') handleLiarJoin(roomRef.key, roomData);
-            else enterRoom(roomRef.key);
+            if (selectedGameType === 'liar') {
+                handleLiarJoin(roomRef.key, roomData);
+            } else if (selectedGameType === 'uno') {
+                handleUnoJoin(roomRef.key, roomData);
+            } else {
+                enterRoom(roomRef.key);
+            }
         });
     };
 
@@ -856,34 +1518,64 @@
         }
 
         get(ref(db, `ongame_room/${id}/type`)).then((snap) => {
-            isLiarGame = (snap.val() === 'liar');
-            update(userRef, { name: myName, status: 'online' });
-            if (isLiarGame) onDisconnect(userRef).update({ status: 'offline' });
-            else onDisconnect(userRef).remove();
+            const type = snap.val();
+            isLiarGame = (type === 'liar');
+            const isUnoGame = (type === 'uno');
+            
+            if (isUnoGame) {
+                update(userRef, { name: myName, online: true });
+                onDisconnect(userRef).update({ online: false });
+            } else if (isLiarGame) {
+                update(userRef, { name: myName, status: 'online' });
+                onDisconnect(userRef).update({ status: 'offline' });
+            } else {
+                update(userRef, { name: myName, status: 'online' });
+                onDisconnect(userRef).remove();
+            }
         });
 
         onValue(ref(db, 'ongame_room/' + id), (snapshot) => {
             const data = snapshot.val();
-            if (!data) { alert("房間已刪除"); leaveRoom(); return; }
+            if (!data) { alert("房間已被刪除或不存在"); leaveRoom(); return; }
             roomDataCache = data;
             
-            // Animation Lock Check
             if (isAnimating && data.type === 'liar') {
-                if (data.gameState !== 'challenge' && data.gameState !== 'playing' && data.gameState !== 'ended') return;
+                if (data.gameState === 'challenge') {
+                } else if (data.gameState === 'playing' || data.gameState === 'ended') {
+                } else {
+                   return; 
+                }
             }
             
-            if (data.type === 'liar') renderLiarGame(data);
-            else renderBoardGame(data);
+            if (data.type === 'liar') {
+                renderLiarGame(data);
+                updateLiarCheatView(data);
+            } else if (data.type === 'uno') {
+                renderUnoGame(data);
+            } else {
+                renderBoardGame(data);
+            }
+        });
+
+        onValue(ref(db, `ongame_room/${id}/chat`), (snapshot) => {
+            const chatDiv = document.getElementById('chat-msgs');
+            chatDiv.innerHTML = "";
+            const msgs = snapshot.val();
+            if(msgs) {
+                Object.values(msgs).forEach(m => {
+                    const p = document.createElement('div');
+                    p.innerHTML = `<b>${m.user}:</b> ${m.text}`;
+                    chatDiv.appendChild(p);
+                });
+                chatDiv.scrollTop = chatDiv.scrollHeight;
+            }
         });
 
         onChildAdded(ref(db, `ongame_room/${id}/chat`), (data) => {
-            if (data.val().time > chatInitTimestamp) spawnFloatingMsg(data.val().text);
-        });
-        onValue(ref(db, `ongame_room/${id}/chat`), (snapshot) => {
-             const div = document.getElementById('chat-msgs');
-             div.innerHTML = "";
-             if(snapshot.val()) Object.values(snapshot.val()).forEach(m => div.innerHTML += `<div><b>${m.user}:</b> ${m.text}</div>`);
-             div.scrollTop = div.scrollHeight;
+            const msg = data.val();
+            if (msg.time > chatInitTimestamp) {
+                spawnFloatingMsg(msg.text);
+            }
         });
     };
     
@@ -892,425 +1584,1023 @@
         const el = document.createElement('div');
         el.className = 'float-msg';
         el.innerText = text;
-        el.style.left = (20 + Math.random() * 60) + '%'; 
+        el.style.left = (30 + Math.random() * 40) + '%'; 
         zone.appendChild(el);
         setTimeout(() => el.remove(), 3000);
     }
 
-    // --- Board Game Logic ---
+    // --- UNO 遊戲渲染與邏輯 ---
+    function renderUnoGame(data) {
+        document.getElementById('ttt-board').classList.add('hidden');
+        document.getElementById('c4-game-wrapper').classList.add('hidden');
+        document.getElementById('liar-wrapper').classList.add('hidden');
+        document.getElementById('btn-undo').classList.add('hidden');
+        document.getElementById('btn-restart-gen').classList.add('hidden');
+        document.getElementById('status').classList.add('hidden');
+        document.getElementById('uno-wrapper').classList.remove('hidden');
+
+        document.getElementById('roomDisplayInfo').innerText = data.name;
+        document.getElementById('uno-room-name').innerText = data.name;
+        document.getElementById('uno-rules-display').innerText = `連出:${(data.settings&&data.settings.chain)?'ON':'OFF'} | 疊加:${(data.settings&&data.settings.stack)?'ON':'OFF'}`;
+
+        const users = Object.keys(data.users || {});
+        const order = data.playerOrder || users;
+        const currentTurnUser = order[data.turnIndex];
+        const isMyTurn = (currentTurnUser === currentUserKey);
+
+        // 重置選取狀態：只有在回合換人時才清空（避免干擾編輯功能的選牌）
+        // 不再因「非自己回合」就強制清空，讓玩家隨時可以選牌給編輯功能使用
+
+        if (data.hands) {
+            Object.entries(data.hands).forEach(([uid, hand]) => {
+                const count = Array.isArray(hand) ? hand.length : 0;
+                const prev = unoLastHandsCount[uid];
+                if (count === 1 && prev !== 1) showUnoAnim();
+                unoLastHandsCount[uid] = count;
+            });
+            Object.keys(unoLastHandsCount).forEach((uid) => {
+                if (!data.hands[uid]) delete unoLastHandsCount[uid];
+            });
+        }
+
+        const statusEl = document.getElementById('uno-turn-status');
+        if (data.gameState === 'waiting') {
+            statusEl.innerText = `等待中 (${users.length}人)`;
+            const isHost = (users.length > 0 && users[0] === currentUserKey);
+            document.getElementById('uno-btn-start').classList.toggle('hidden', !(isHost && users.length >= 2));
+            document.getElementById('uno-btn-play').classList.add('hidden');
+            document.getElementById('uno-btn-pass').classList.add('hidden');
+        } else if (data.gameState === 'playing') {
+            document.getElementById('uno-btn-start').classList.add('hidden');
+            if (isMyTurn) {
+                statusEl.innerText = "👉 輪到你了！";
+                statusEl.style.color = "#facc15";
+            } else {
+                const name = data.users[currentTurnUser]?.name || "對手";
+                statusEl.innerText = `等待 ${name}...`;
+                statusEl.style.color = "#cbd5e1";
+            }
+            const btnPlay = document.getElementById('uno-btn-play');
+            const btnPass = document.getElementById('uno-btn-pass');
+            if (isMyTurn) {
+                btnPlay.classList.toggle('hidden', unoSelectedIndices.length === 0);
+                btnPass.classList.toggle('hidden', false);
+                btnPass.innerText = (data.accumulatedDraw > 0) ? `罰抽 (${data.accumulatedDraw})` : "抽牌";
+            } else {
+                btnPlay.classList.add('hidden');
+                btnPass.classList.add('hidden');
+            }
+        } else if (data.gameState === 'ended') {
+            const finished = data.finishedPlayers || [];
+            let rankHtml = finished.map((uid, idx) => {
+                let badge = idx === 0 ? '🥇 第一名' : idx === 1 ? '🥈 第二名' : idx === 2 ? '🥉 第三名' : `🏅 第${idx + 1}名`;
+                return `<div style="margin: 10px 0;">${badge}：${data.users[uid]?.name || '未知'}</div>`;
+            }).join('');
+            
+            document.getElementById('win-message').innerHTML = `🏆 UNO 遊戲結束 🏆<br><div style="font-size: 0.5em; line-height: 1.5; margin-top: 20px; text-align: left; display: inline-block;">${rankHtml}</div>`;
+            document.getElementById('win-overlay').style.display = 'flex';
+            statusEl.innerText = `遊戲結束！`;
+        }
+
+        const centerMsgEl = document.getElementById('uno-center-message');
+        const currentAction = data.lastAction || "";
+        if (currentAction && unoShowGameMsg) {
+            if (currentAction !== unoLastRenderedAction) {
+                centerMsgEl.innerHTML = currentAction;
+                centerMsgEl.style.opacity = "1";
+                if (unoCenterMsgTimeoutId) clearTimeout(unoCenterMsgTimeoutId);
+                unoCenterMsgTimeoutId = setTimeout(() => { centerMsgEl.style.opacity = "0"; }, 3000);
+                unoLastRenderedAction = currentAction;
+            }
+        } else {
+            centerMsgEl.style.opacity = "0";
+            if (unoCenterMsgTimeoutId) { clearTimeout(unoCenterMsgTimeoutId); unoCenterMsgTimeoutId = null; }
+            unoLastRenderedAction = "";
+        }
+
+        const oppContainer = document.getElementById('uno-opponents-container');
+        oppContainer.innerHTML = "";
+        order.forEach((uid, idx) => {
+            if (uid === currentUserKey) return;
+            const u = data.users[uid];
+            const handCount = (data.hands && data.hands[uid]) ? data.hands[uid].length : 0;
+            const isActive = (data.gameState === 'playing' && idx === data.turnIndex);
+            const isOffline = !u.online;
+            const isFinished = (data.finishedPlayers || []).includes(uid);
+            
+            const div = document.createElement('div');
+            div.className = `uno-opponent-card ${isActive ? 'active' : ''}`;
+            
+            if (isFinished) {
+                let rankIdx = data.finishedPlayers.indexOf(uid);
+                let badge = rankIdx === 0 ? '🥇' : rankIdx === 1 ? '🥈' : rankIdx === 2 ? '🥉' : `${rankIdx + 1}.`;
+                div.innerHTML = `<div class="opp-name">${isOffline ? u.name + ' (離線)' : u.name}</div><div class="opp-count">${badge}</div><small style="font-size:0.6rem; color:#facc15;">完成</small>`;
+                div.style.opacity = '0.6';
+            } else {
+                div.innerHTML = `<div class="opp-name">${isOffline ? u.name + ' (離線)' : u.name}</div><div class="opp-count">${handCount}</div><small style="font-size:0.6rem; color:#94a3b8;">cards</small>`;
+            }
+            oppContainer.appendChild(div);
+        });
+
+        const discardEl = document.getElementById('uno-discard-pile');
+        discardEl.innerHTML = "";
+        if (data.discardPile && data.discardPile.length > 0) {
+            const total = data.discardPile.length;
+            const startIdx = Math.max(0, total - 5);
+            const recentCards = data.discardPile.slice(startIdx);
+            recentCards.forEach((card, idx) => {
+                let visualCard = { ...card };
+                const isTop = (idx === recentCards.length - 1);
+                let extraClass = "";
+                if (isTop && card.color === 'black') {
+                    if (data.currentColor === 'red') extraClass = "uno-tint-red";
+                    else if (data.currentColor === 'blue') extraClass = "uno-tint-blue";
+                    else if (data.currentColor === 'green') extraClass = "uno-tint-green";
+                    else if (data.currentColor === 'yellow') extraClass = "uno-tint-yellow";
+                }
+                const cardDom = createUnoCardDOM(visualCard);
+                if (extraClass) cardDom.classList.add(extraClass);
+                cardDom.style.position = "absolute";
+                const offset = idx * 3;
+                cardDom.style.top = (-offset) + "px";
+                cardDom.style.left = (offset) + "px";
+                cardDom.style.transform = "rotate(" + (card.rotation || (Math.random()*20-10)) + "deg)";
+                cardDom.style.zIndex = String(idx);
+                discardEl.appendChild(cardDom);
+            });
+        }
+
+        const dirEl = document.getElementById('uno-dir-indicator');
+        if (dirEl) dirEl.style.animationDirection = (data.direction === 1) ? 'normal' : 'reverse';
+
+        renderUnoHand(data);
+    }
+
+    function renderUnoHand(data) {
+        const container = document.getElementById('uno-my-hand');
+        container.innerHTML = "";
+        const myHand = (data.hands && data.hands[currentUserKey]) || [];
+        if (myHand.length === 0) return;
+        const overlapMargin = -28;
+        const isMyTurn = data.gameState === 'playing' && data.playerOrder && data.playerOrder[data.turnIndex] === currentUserKey;
+        myHand.forEach((c, idx) => {
+            const el = createUnoCardDOM(c);
+            el.style.marginLeft = (idx === 0) ? '0' : (overlapMargin + 'px');
+            el.style.zIndex = idx;
+            // 永遠可以點選（讓編輯功能隨時可用）
+            el.onclick = () => unoToggleSelect(idx, c);
+            // 非自己回合時視覺上暗一點，但不加 disabled（pointer-events 不封鎖）
+            if (!isMyTurn) {
+                el.style.opacity = '0.65';
+                el.style.filter = 'brightness(0.7)';
+            }
+            if (unoSelectedIndices.includes(idx)) el.classList.add('selected');
+            container.appendChild(el);
+        });
+    }
+
+    function createUnoCardDOM(card) {
+        let symbol = card.value;
+        if (card.type === 'skip') symbol = '⊘';
+        if (card.type === 'reverse') symbol = '⇄';
+        if (card.type === 'draw2') symbol = '+2';
+        if (card.type === 'wild') symbol = '⊕';
+        if (card.type === 'wild4') symbol = '+4';
+        let bgClass = 'uno-bg-' + card.color;
+        if ((card.type === 'wild' || card.type === 'wild4') && card.color === 'black') bgClass = 'uno-bg-wild';
+        const el = document.createElement('div');
+        el.className = `uno-card ${bgClass}`;
+        el.innerHTML = `<div class="corner tl">${symbol}</div><div class="card-oval"><span class="card-symbol">${symbol}</span></div><div class="corner br">${symbol}</div>`;
+        return el;
+    }
+
+    function getUnoSortWeight(card) {
+        const colorWeight = { red: 1000, blue: 2000, green: 3000, yellow: 4000, black: 5000 };
+        const typeWeight = { '0':0,'1':1,'2':2,'3':3,'4':4,'5':5,'6':6,'7':7,'8':8,'9':9,'skip':20,'reverse':21,'draw2':22,'wild':50,'wild4':51 };
+        return (colorWeight[card.color] || 0) + (typeWeight[card.value] || 0);
+    }
+    function sortUnoHandArray(hand) { return hand.sort((a, b) => getUnoSortWeight(a) - getUnoSortWeight(b)); }
+
+    window.unoToggleSelect = (idx, card) => {
+        if (unoIsProcessing) return;
+        const data = roomDataCache;
+        if (!data) return;
+        // 若沒有 settings（waiting 狀態）或 chain 為 false，單選模式
+        const chainMode = data.settings && data.settings.chain;
+        if (!chainMode) {
+            // 若已選同一張則取消，否則切換到新的
+            unoSelectedIndices = (unoSelectedIndices.length === 1 && unoSelectedIndices[0] === idx) ? [] : [idx];
+        } else {
+            if (unoSelectedIndices.includes(idx)) unoSelectedIndices = unoSelectedIndices.filter(i => i !== idx);
+            else {
+                if (unoSelectedIndices.length > 0 && data.hands && data.hands[currentUserKey]) {
+                    const firstCard = data.hands[currentUserKey][unoSelectedIndices[0]];
+                    if (firstCard && card.value === firstCard.value) unoSelectedIndices.push(idx);
+                    else unoSelectedIndices = [idx];
+                } else unoSelectedIndices = [idx];
+            }
+        }
+        renderUnoGame(data);
+    };
+
+    window.unoStartGame = async () => {
+        unoSelectedIndices = []; // 開始遊戲強制歸位
+        const data = roomDataCache;
+        const users = Object.keys(data.users || {});
+        const deck = unoGenerateDeck();
+        const hands = {};
+        const handSize = data.initialHandSize || 7;
+        users.forEach(u => { hands[u] = sortUnoHandArray(deck.splice(0, handSize)); });
+        let firstCard = deck.pop();
+        while (firstCard.type !== 'n') { deck.unshift(firstCard); firstCard = deck.pop(); }
+        const firstCardWithRotation = { ...firstCard, rotation: (Math.random()*20-10).toFixed(1) };
+        await update(ref(db, `ongame_room/${currentRoomId}`), {
+            gameState: 'playing', deck, hands, discardPile: [firstCardWithRotation],
+            playerOrder: users.sort(() => Math.random() - 0.5), turnIndex: 0, direction: 1,
+            currentColor: firstCard.color, accumulatedDraw: 0, lastAction: "遊戲開始！", status: 'playing',
+            finishedPlayers: []
+        });
+    };
+
+    window.unoPlaySelected = () => {
+        if (unoSelectedIndices.length === 0) return;
+        const data = roomDataCache;
+        const hand = data.hands[currentUserKey];
+        const cardsToPlay = unoSelectedIndices.map(i => hand[i]);
+        const top = data.discardPile[data.discardPile.length - 1];
+        const lead = cardsToPlay[0];
+        
+        if (data.accumulatedDraw > 0) {
+            const isValid = (top.type === 'draw2' && lead.type === 'draw2') || (top.type === 'wild4' && lead.type === 'wild4');
+            if (!isValid) {
+                alert("必須出同樣的加牌(+2/+4)來疊加，或按罰抽");
+                unoSelectedIndices = []; // 無效操作歸位
+                renderUnoGame(roomDataCache);
+                return;
+            }
+        } else {
+            const colorMatch = (lead.color === data.currentColor);
+            const valueMatch = (lead.value === top.value);
+            const isWild = (lead.color === 'black');
+            if (!colorMatch && !valueMatch && !isWild) {
+                alert("這張牌無法打出！");
+                unoSelectedIndices = []; // 無效操作歸位
+                renderUnoGame(roomDataCache);
+                return;
+            }
+        }
+        if (cardsToPlay[cardsToPlay.length - 1].color === 'black') {
+            unoPendingPlayCards = { indices: [...unoSelectedIndices], cards: cardsToPlay };
+            document.getElementById('uno-color-modal').classList.remove('hidden');
+            return;
+        }
+        executeUnoMove(unoSelectedIndices, cardsToPlay, null);
+    };
+
+    window.unoSelectWildColor = (color) => {
+        document.getElementById('uno-color-modal').classList.add('hidden');
+        if (unoPendingPlayCards && unoPendingPlayCards.fromDraw) {
+            finishUnoPlayDrawn(unoPendingPlayCards.cards[0], color);
+            unoPendingPlayCards = null;
+        } else if (unoPendingPlayCards) {
+            executeUnoMove(unoPendingPlayCards.indices, unoPendingPlayCards.cards, color);
+            unoPendingPlayCards = null;
+        }
+    };
+
+    async function executeUnoMove(indices, cards, nextColor) {
+        unoIsProcessing = true;
+        const data = roomDataCache;
+        let newHand = [...data.hands[currentUserKey]];
+        indices.forEach(i => newHand[i] = null);
+        newHand = newHand.filter(c => c !== null);
+        newHand = sortUnoHandArray(newHand);
+
+        const updates = {};
+        updates[`ongame_room/${currentRoomId}/hands/${currentUserKey}`] = newHand;
+        
+        // 處理遊戲結束/完成玩家名單
+        let finishedList = data.finishedPlayers || [];
+        if (newHand.length === 0 && !finishedList.includes(currentUserKey)) {
+            finishedList = [...finishedList, currentUserKey];
+        }
+        updates[`ongame_room/${currentRoomId}/finishedPlayers`] = finishedList;
+        let activeCount = data.playerOrder.length - finishedList.length;
+
+        let dir = data.direction, acc = data.accumulatedDraw, steps = 1, newlyAddedAcc = 0;
+        let actionMsg = "";
+        const myNameInGame = data.users[currentUserKey].name;
+
+        cards.forEach(c => {
+            if (c.type === 'reverse') {
+                if (activeCount <= 2) steps += 1; // 剩2名在場玩家時迴轉等同禁止
+                else dir *= -1;
+                actionMsg = `${myNameInGame} 進行了迴轉！`;
+            }
+            if (c.type === 'skip') {
+                steps += 1;
+                let targetIdx = getUnoNextActiveIndex(data, data.turnIndex, dir, 1, finishedList);
+                actionMsg = `${myNameInGame} 禁止了 ${data.users[data.playerOrder[targetIdx]].name}！`;
+            }
+            if (c.type === 'draw2') {
+                newlyAddedAcc += 2;
+                let targetIdx = getUnoNextActiveIndex(data, data.turnIndex, dir, 1, finishedList);
+                actionMsg = `${myNameInGame} 讓 ${data.users[data.playerOrder[targetIdx]].name} 多了 2 張牌`;
+            }
+            if (c.type === 'wild4') {
+                newlyAddedAcc += 4;
+                let targetIdx = getUnoNextActiveIndex(data, data.turnIndex, dir, 1, finishedList);
+                const colorMap = { red: '紅色', blue: '藍色', green: '綠色', yellow: '黃色' };
+                actionMsg = `${myNameInGame} 讓 ${data.users[data.playerOrder[targetIdx]].name} 多了 4 張牌 並選取了 ${colorMap[nextColor]}`;
+            }
+        });
+        if (actionMsg) updates[`ongame_room/${currentRoomId}/lastAction`] = actionMsg;
+
+        let nc = nextColor || cards[cards.length - 1].color;
+        if (nc === 'black') nc = 'red';
+        const cardsWithRotation = cards.map(card => ({ ...card, rotation: card.rotation || (Math.random()*20-10).toFixed(1) }));
+
+        if (newlyAddedAcc > 0 && !(data.settings && data.settings.stack)) {
+            let nextIdx = getUnoNextActiveIndex(data, data.turnIndex, dir, steps, finishedList);
+            const targetUserKey = data.playerOrder[nextIdx];
+            let currentDeck = data.deck || [], currentDiscard = [...data.discardPile, ...cardsWithRotation], drawn = [];
+            for (let k = 0; k < newlyAddedAcc; k++) {
+                if (currentDeck.length === 0) {
+                    if (currentDiscard.length <= 1) break;
+                    const top = currentDiscard.pop();
+                    currentDeck = currentDiscard.sort(() => Math.random() - 0.5);
+                    currentDiscard = [top];
+                }
+                drawn.push(currentDeck.shift());
+            }
+            let targetHand = data.hands[targetUserKey] || [];
+            updates[`ongame_room/${currentRoomId}/hands/${targetUserKey}`] = sortUnoHandArray([...targetHand, ...drawn]);
+            updates[`ongame_room/${currentRoomId}/deck`] = currentDeck;
+            updates[`ongame_room/${currentRoomId}/discardPile`] = currentDiscard;
+            steps += 1; // victim被跳過
+            updates[`ongame_room/${currentRoomId}/accumulatedDraw`] = 0;
+        } else {
+            acc += newlyAddedAcc;
+            updates[`ongame_room/${currentRoomId}/accumulatedDraw`] = acc;
+            updates[`ongame_room/${currentRoomId}/discardPile`] = [...data.discardPile, ...cardsWithRotation];
+        }
+
+        let nextIdx = getUnoNextActiveIndex(data, data.turnIndex, dir, steps, finishedList);
+        updates[`ongame_room/${currentRoomId}/turnIndex`] = nextIdx;
+        updates[`ongame_room/${currentRoomId}/direction`] = dir;
+        updates[`ongame_room/${currentRoomId}/currentColor`] = nc;
+
+        // 若只剩下最後一名玩家，遊戲結束
+        if (finishedList.length >= data.playerOrder.length - 1) {
+            updates[`ongame_room/${currentRoomId}/gameState`] = 'ended';
+            let lastPlayer = data.playerOrder.find(uid => !finishedList.includes(uid));
+            if (lastPlayer) finishedList.push(lastPlayer);
+            updates[`ongame_room/${currentRoomId}/finishedPlayers`] = finishedList;
+        }
+        
+        unoSelectedIndices = []; // 出完牌強制歸位 (移到 update 之前，防止 onValue 渲染到舊的選取狀態)
+        await update(ref(db), updates);
+        unoIsProcessing = false;
+    }
+
+    window.unoDrawCardClick = async () => {
+        if (unoIsProcessing || !roomDataCache) return;
+        const data = roomDataCache;
+        const isMyTurn = (data.playerOrder[data.turnIndex] === currentUserKey);
+        if (isMyTurn && data.accumulatedDraw > 0) { unoPassTurn(); return; }
+        if (!isMyTurn) return;
+        let deck = [...(data.deck || [])], discard = [...(data.discardPile || [])];
+        if (deck.length === 0) {
+            if (discard.length <= 1) return alert("沒牌了！");
+            const top = discard.pop();
+            deck = discard.sort(() => Math.random() - 0.5);
+            discard = [top];
+            await update(ref(db, `ongame_room/${currentRoomId}`), { discardPile: discard, deck: deck });
+        }
+        runTransaction(ref(db, `ongame_room/${currentRoomId}/deck`), (currentDeck) => {
+            if (!currentDeck || currentDeck.length === 0) return currentDeck;
+            currentDeck.shift();
+            return currentDeck;
+        }).then((result) => {
+            if (result.committed) {
+                const card = (data.deck || [])[0];
+                showUnoDrawModal(card);
+            }
+        });
+    };
+
+    function showUnoDrawModal(card) {
+        unoPendingDrawnCard = card;
+        const modal = document.getElementById('uno-draw-modal');
+        const content = document.getElementById('uno-drawn-card-placeholder');
+        const msg = document.getElementById('uno-draw-msg');
+        const actions = document.getElementById('uno-draw-actions');
+        content.innerHTML = "";
+        content.appendChild(createUnoCardDOM(card));
+        const data = roomDataCache;
+        const top = data.discardPile[data.discardPile.length - 1];
+        const isWild = (card.color === 'black');
+        const colorMatch = (card.color === data.currentColor);
+        const valMatch = (card.value === top.value);
+        const playable = (isWild || colorMatch || valMatch);
+        actions.innerHTML = "";
+        if (playable) {
+            msg.innerText = "這張牌可以打出！";
+            const btnKeep = document.createElement('button');
+            btnKeep.className = "btn-sm";
+            btnKeep.style.background = "#64748b";
+            btnKeep.innerText = "收下";
+            btnKeep.onclick = () => unoPlayDrawnCard(false);
+            const btnPlay = document.createElement('button');
+            btnPlay.className = "btn-sm btn-green";
+            btnPlay.innerText = "丟出";
+            btnPlay.onclick = () => unoPlayDrawnCard(true);
+            actions.appendChild(btnKeep);
+            actions.appendChild(btnPlay);
+        } else {
+            msg.innerText = " ";
+            const btnKeep = document.createElement('button');
+            btnKeep.className = "btn-sm";
+            btnKeep.style.background = "#64748b";
+            btnKeep.innerText = "收下";
+            btnKeep.onclick = () => unoPlayDrawnCard(false);
+            actions.appendChild(btnKeep);
+        }
+        modal.classList.remove('hidden');
+    }
+
+    window.unoPlayDrawnCard = (playIt) => {
+        document.getElementById('uno-draw-modal').classList.add('hidden');
+        const card = unoPendingDrawnCard;
+        unoPendingDrawnCard = null;
+        const data = roomDataCache;
+        if (playIt) {
+            if (card.color === 'black') {
+                unoPendingPlayCards = { indices: [], cards: [card], fromDraw: true };
+                document.getElementById('uno-color-modal').classList.remove('hidden');
+            } else finishUnoPlayDrawn(card, null);
+        } else {
+            const newHand = sortUnoHandArray([...data.hands[currentUserKey], card]);
+            let nextIdx = getUnoNextActiveIndex(data, data.turnIndex, data.direction, 1);
+            
+            unoSelectedIndices = []; // 提早重置
+            
+            update(ref(db, `ongame_room/${currentRoomId}`), {
+                [`hands/${currentUserKey}`]: newHand,
+                turnIndex: nextIdx,
+                lastAction: `${data.users[currentUserKey].name} 抽了一張牌`
+            }).then(() => { renderUnoGame(roomDataCache); });
+        }
+    };
+
+    async function finishUnoPlayDrawn(card, wildColor) {
+        const data = roomDataCache;
+        const updates = {};
+        
+        let finishedList = data.finishedPlayers || [];
+        let activeCount = data.playerOrder.length - finishedList.length;
+
+        let dir = data.direction, steps = 1, acc = data.accumulatedDraw, newlyAddedAcc = 0;
+        let actionMsg = "";
+        const myNameInGame = data.users[currentUserKey].name;
+        if (card.type === 'reverse') { if (activeCount <= 2) steps += 1; else dir *= -1; actionMsg = `${myNameInGame} 進行了迴轉！`; }
+        if (card.type === 'skip') { steps += 1; let ti = getUnoNextActiveIndex(data, data.turnIndex, dir, 1, finishedList); actionMsg = `${myNameInGame} 禁止了 ${data.users[data.playerOrder[ti]].name}！`; }
+        if (card.type === 'draw2') { newlyAddedAcc += 2; let ti = getUnoNextActiveIndex(data, data.turnIndex, dir, 1, finishedList); actionMsg = `${myNameInGame} 讓 ${data.users[data.playerOrder[ti]].name} 多了 2 張牌`; }
+        if (card.type === 'wild4') { newlyAddedAcc += 4; let ti = getUnoNextActiveIndex(data, data.turnIndex, dir, 1, finishedList); const colorMap = {red:'紅色',blue:'藍色',green:'綠色',yellow:'黃色'}; actionMsg = `${myNameInGame} 讓 ${data.users[data.playerOrder[ti]].name} 多了 4 張牌 並選取了 ${colorMap[wildColor]}`; }
+        if (!actionMsg) actionMsg = `${myNameInGame} 打出了 ${card.value}`;
+        updates[`ongame_room/${currentRoomId}/lastAction`] = actionMsg;
+        const cardWithRotation = { ...card, rotation: card.rotation || (Math.random()*20-10).toFixed(1) };
+        if (newlyAddedAcc > 0 && !(data.settings && data.settings.stack)) {
+            let nextIdx = getUnoNextActiveIndex(data, data.turnIndex, dir, steps, finishedList);
+            const targetUserKey = data.playerOrder[nextIdx];
+            let currentDeck = data.deck || [], currentDiscard = [...data.discardPile, cardWithRotation], drawn = [];
+            for (let k = 0; k < newlyAddedAcc; k++) {
+                if (currentDeck.length === 0) { if (currentDiscard.length <= 1) break; const top = currentDiscard.pop(); currentDeck = currentDiscard.sort(() => Math.random() - 0.5); currentDiscard = [top]; }
+                drawn.push(currentDeck.shift());
+            }
+            updates[`ongame_room/${currentRoomId}/hands/${targetUserKey}`] = sortUnoHandArray([...(data.hands[targetUserKey]||[]), ...drawn]);
+            updates[`ongame_room/${currentRoomId}/deck`] = currentDeck;
+            updates[`ongame_room/${currentRoomId}/discardPile`] = currentDiscard;
+            steps += 1;
+            updates[`ongame_room/${currentRoomId}/accumulatedDraw`] = 0;
+        } else {
+            acc += newlyAddedAcc;
+            updates[`ongame_room/${currentRoomId}/accumulatedDraw`] = acc;
+            updates[`ongame_room/${currentRoomId}/discardPile`] = [...data.discardPile, cardWithRotation];
+        }
+        let nextIdx = getUnoNextActiveIndex(data, data.turnIndex, dir, steps, finishedList);
+        let nc = wildColor || card.color;
+        updates[`ongame_room/${currentRoomId}/turnIndex`] = nextIdx;
+        updates[`ongame_room/${currentRoomId}/direction`] = dir;
+        updates[`ongame_room/${currentRoomId}/currentColor`] = nc;
+        
+        unoSelectedIndices = []; // 提早重置
+        
+        await update(ref(db), updates);
+        renderUnoGame(roomDataCache);
+    }
+
+    window.unoPassTurn = async () => {
+        const data = roomDataCache;
+        const acc = data.accumulatedDraw;
+        const myNameInGame = data.users[currentUserKey].name;
+        if (acc > 0) {
+            let deck = [...(data.deck||[])], discard = [...(data.discardPile||[])], drawn = [];
+            for (let i = 0; i < acc; i++) {
+                if (deck.length === 0) { if (discard.length <= 1) break; const top = discard.pop(); deck = discard.sort(() => Math.random() - 0.5); discard = [top]; }
+                drawn.push(deck.shift());
+            }
+            const newHand = sortUnoHandArray([...data.hands[currentUserKey], ...drawn]);
+            let nextIdx = getUnoNextActiveIndex(data, data.turnIndex, data.direction, 1);
+            
+            unoSelectedIndices = []; // 提早重置
+            
+            await update(ref(db, `ongame_room/${currentRoomId}`), {
+                [`hands/${currentUserKey}`]: newHand, deck, discardPile: discard,
+                accumulatedDraw: 0, turnIndex: nextIdx,
+                lastAction: `${myNameInGame} 罰抽了 ${acc} 張牌`
+            });
+            renderUnoGame(roomDataCache);
+        } else unoDrawCardClick();
+    };
+
+    window.unoResetGame = () => {
+        unoSelectedIndices = []; // 重置強制歸位
+        update(ref(db, `ongame_room/${currentRoomId}`), {
+            gameState: 'waiting', hands: {}, discardPile: [], accumulatedDraw: 0, lastAction: "準備重新開始", finishedPlayers: []
+        });
+        closeWinOverlay();
+    };
+
+    function unoGenerateDeck() {
+        const colors = ['red','blue','green','yellow'];
+        let d = [];
+        colors.forEach(c => {
+            d.push({ type: 'n', color: c, value: '0' });
+            for (let i = 1; i <= 9; i++) { d.push({ type: 'n', color: c, value: String(i) }); d.push({ type: 'n', color: c, value: String(i) }); }
+            ['skip','reverse','draw2'].forEach(t => { d.push({ type: t, color: c, value: t }); d.push({ type: t, color: c, value: t }); });
+        });
+        for (let i = 0; i < 4; i++) { d.push({ type: 'wild', color: 'black', value: 'wild' }); d.push({ type: 'wild4', color: 'black', value: 'wild4' }); }
+        return d.sort(() => Math.random() - 0.5);
+    }
+
+    function showUnoAnim() {
+        const el = document.getElementById('uno-shout');
+        if (!el) return;
+        el.style.animation = 'none';
+        el.offsetHeight;
+        el.style.animation = 'unoShoutPop 1.5s forwards';
+    }
+
+    window.openUnoSettings = () => {
+        document.getElementById('uno-setting-nickname').value = myName;
+        document.getElementById('uno-settings-modal').classList.remove('hidden');
+    };
+    window.closeUnoSettings = () => document.getElementById('uno-settings-modal').classList.add('hidden');
+    window.updateUnoNickname = async () => {
+        const newName = (document.getElementById('uno-setting-nickname').value || '').trim();
+        if (!newName) return alert("暱稱不能為空！");
+        myName = newName;
+        localStorage.setItem('playerName', myName);
+        if (currentRoomId && currentUserKey && roomDataCache && roomDataCache.type === 'uno') {
+            await update(ref(db, `ongame_room/${currentRoomId}/users/${currentUserKey}`), { name: myName });
+        }
+        alert("暱稱已更改為: " + myName);
+    };
+    window.updateUnoScale = (val) => {
+        document.documentElement.style.setProperty('--uno-card-w', (70 * val) + 'px');
+        document.documentElement.style.setProperty('--uno-card-h', (105 * val) + 'px');
+        if (currentRoomId && roomDataCache && roomDataCache.type === 'uno') renderUnoHand(roomDataCache);
+    };
+
+    // --- 棋盤遊戲渲染 (圈圈叉叉/四連棋) ---
     function renderBoardGame(data) {
         document.getElementById('liar-wrapper').classList.add('hidden');
+        document.getElementById('uno-wrapper').classList.add('hidden');
         document.getElementById('btn-undo').classList.remove('hidden');
-        document.getElementById('c4-game-wrapper').classList.toggle('hidden', data.type !== 'c4');
-        document.getElementById('ttt-board').classList.toggle('hidden', data.type === 'c4');
+        document.getElementById('btn-restart-gen').classList.remove('hidden');
+        document.getElementById('status').classList.remove('hidden');
         
         document.getElementById('roomDisplayInfo').innerText = data.name;
-        document.getElementById('gameMetaInfo').innerText = `${data.type==='c4'?'四連棋':'圈叉'} | ${data.rows}x${data.cols}`;
+        const rows = data.rows || 3;
+        const cols = data.cols || 3;
+        const userList = data.users ? Object.values(data.users) : [];
+        const p1Name = userList[0] ? userList[0].name : "P1";
+        const p2Name = userList[1] ? userList[1].name : "P2";
+        const currentPlayerName = (data.turn % 2 === 0) ? p1Name : p2Name;
         
-        const u = Object.values(data.users||{});
-        const turnName = (u[data.turn%2]?.name) || "P"+((data.turn%2)+1);
-        document.getElementById('status').innerText = `輪到: ${turnName}`;
+        document.getElementById('gameMetaInfo').innerText = `${data.type === 'c4'?'四連棋':'圈叉'} | ${rows}x${cols}`;
 
-        if (data.type === 'c4') renderC4Board(data);
-        else renderTTTBoard(data);
+        if (data.type === 'c4') {
+            document.getElementById('ttt-board').classList.add('hidden');
+            document.getElementById('c4-game-wrapper').classList.remove('hidden');
+            renderC4Board(data, rows, cols);
+             document.getElementById('status').innerText = `輪到: ${currentPlayerName} ${data.turn%2===0?'(P1)':'(P2)'}`;
+             document.getElementById('status').style.color = (data.turn%2===0) ? (data.p1Color||'#f87171') : (data.p2Color||'#facc15');
+        } else {
+            document.getElementById('c4-game-wrapper').classList.add('hidden');
+            document.getElementById('ttt-board').classList.remove('hidden');
+            renderTTTBoard(data, rows, cols);
+            document.getElementById('status').innerText = `輪到: ${currentPlayerName} (${data.turn%2===0?'X':'O'})`;
+            document.getElementById('status').style.color = '#f87171';
+        }
         checkBoardWinner(data);
     }
 
-    // --- LIAR'S DECK LOGIC (FIXED) ---
+    // --- 移植版 騙子桌遊 邏輯與渲染 ---
+
     function renderLiarGame(data) {
         document.getElementById('ttt-board').classList.add('hidden');
         document.getElementById('c4-game-wrapper').classList.add('hidden');
+        document.getElementById('uno-wrapper').classList.add('hidden');
         document.getElementById('btn-undo').classList.add('hidden');
+        document.getElementById('btn-restart-gen').classList.add('hidden');
+        document.getElementById('status').classList.add('hidden');
         document.getElementById('liar-wrapper').classList.remove('hidden');
         
         document.getElementById('roomDisplayInfo').innerText = data.name;
-        document.getElementById('gameMetaInfo').innerText = "Liar's Deck Mod";
-        
+        document.getElementById('gameMetaInfo').innerText = "Liar's Deck" + (data.anytimeLiar ? " | 隨時抓謊ON" : "");
+
         const users = data.users || {};
         const playerKeys = data.playerOrder || Object.keys(users);
-        const activeCount = Object.values(users).filter(u => u.status !== 'offline').length;
         
-        // --- 狀態管理 ---
         const statusEl = document.getElementById('liar-status-text');
+        const targetEl = document.getElementById('liar-target-display');
+        const stackArea = document.getElementById('liar-stack-area');
+        const lastMoveInfoEl = document.getElementById('last-move-info');
+        const myGunDiv = document.getElementById('my-gun-status');
+        const introOverlay = document.getElementById('intro-overlay');
         
+        if (data.gameState !== 'intro') {
+            introOverlay.style.display = 'none';
+        }
+
         if (data.gameState === 'waiting') {
+            const activeCount = Object.values(users).filter(u => u.status !== 'offline').length;
             statusEl.innerText = `準備中 (在線: ${activeCount}人)`;
-            document.getElementById('liar-target-display').classList.add('hidden');
-            document.getElementById('liar-stack-area').innerHTML = "";
-            document.getElementById('last-move-info').style.display = 'none';
-            document.getElementById('my-gun-status').classList.add('hidden');
-            document.getElementById('liar-controls').classList.add('hidden');
-            document.getElementById('intro-overlay').style.display = 'none';
+            targetEl.classList.add('hidden');
+            stackArea.innerHTML = "";
+            lastMoveInfoEl.innerText = ""; 
+            myGunDiv.classList.add('hidden'); 
+            document.getElementById('liar-reveal-overlay').style.display = 'none';
+            document.getElementById('gun-anim-overlay').style.display = 'none';
+            isAnimating = false;
+            processingAction = false;
             
-            // Host logic: First valid player
-            if (playerKeys.length > 0 && playerKeys[0] === currentUserKey && activeCount >= 2) {
+            if (playerKeys[0] === currentUserKey && activeCount >= 2) {
                 document.getElementById('btn-liar-start').classList.remove('hidden');
-                document.getElementById('btn-liar-start').innerText = "你是房主 - 開始遊戲";
             } else {
                 document.getElementById('btn-liar-start').classList.add('hidden');
             }
-            isAnimating = false;
         } 
         else if (data.gameState === 'intro') {
             statusEl.innerText = "發牌中...";
             document.getElementById('btn-liar-start').classList.add('hidden');
-            renderIntroDeck(data.deckMeta);
+            renderIntroDeck();
         }
         else if (data.gameState === 'playing') {
-            document.getElementById('intro-overlay').style.display = 'none';
-            document.getElementById('liar-target-display').classList.remove('hidden');
-            document.getElementById('liar-target-display').innerText = `指定: ${data.targetRank}`;
-            document.getElementById('my-gun-status').classList.remove('hidden');
+            document.getElementById('btn-liar-start').classList.add('hidden');
+            document.getElementById('liar-reveal-overlay').style.display = 'none';
+            document.getElementById('gun-anim-overlay').style.display = 'none';
+            targetEl.classList.remove('hidden');
+            targetEl.innerText = `當局牌: ${data.targetRank}`;
+            myGunDiv.classList.remove('hidden');
             
-            // Turn Logic
             const curPlayerKey = playerKeys[data.turnIndex];
+            const curPlayer = users[curPlayerKey];
             const isMyTurn = (curPlayerKey === currentUserKey);
-            checkLiarTurnSkip(data, curPlayerKey); // Auto-skip Logic
-
-            const myHand = data.hands[currentUserKey] || [];
-            const stackSize = data.stack ? data.stack.length : 0;
-            const aliveKeys = playerKeys.filter(k => !data.guns[k]?.isDead);
             
-            // --- Force Call Logic (Empty Hand) ---
+            checkLiarTurnSkip(data, curPlayerKey, curPlayer);
+
+            const aliveKeys = playerKeys.filter(k => !data.guns[k]?.isDead);
+            const lastMove = data.stack && data.stack.length > 0 ? data.stack[data.stack.length - 1] : null;
             let forceCall = false;
-            if (isMyTurn && myHand.length === 0 && stackSize > 0) {
-                 forceCall = true; // Must call if no cards
+
+            const otherPlayersWithCards = aliveKeys.filter(k => k !== curPlayerKey && data.hands[k] && data.hands[k].length > 0);
+            if (lastMove) {
+                if (aliveKeys.length === 2) {
+                    const prevOwnerHand = data.hands[lastMove.owner];
+                    if (prevOwnerHand && prevOwnerHand.length === 0) {
+                        forceCall = true;
+                    }
+                }
+                if (otherPlayersWithCards.length === 0) {
+                    forceCall = true;
+                }
             }
-            // Logic for 2 players left: if opponent has empty hand? No, only I care about MY hand.
             
             if (forceCall) {
-                statusEl.innerHTML = `<b style="color:#ef4444">沒牌了! 強制抓謊!</b>`;
-                document.getElementById('liar-controls').classList.add('hidden');
-                if (!processingAction && !window.autoCallTimer) {
-                    window.autoCallTimer = setTimeout(() => { callLiar(); window.autoCallTimer = null; }, 1500);
+                if (isMyTurn) {
+                    statusEl.innerHTML = `<b style="color:#ef4444">沒牌了 Liar!</b>`;
+                    document.getElementById('liar-controls').classList.add('hidden');
+
+                    if (!window.liarAutoCallPending) {
+                        window.liarAutoCallPending = true;
+                        setTimeout(() => {
+                            callLiar();
+                            window.liarAutoCallPending = false; 
+                        }, 1000);
+                    }
+                } else {
+                    statusEl.innerHTML = `無人可接牌/對手已空，系統即將強制檢驗...`;
+                    document.getElementById('liar-controls').classList.add('hidden');
                 }
             } else {
-                document.getElementById('liar-controls').classList.remove('hidden');
-                const curName = users[curPlayerKey]?.name || "未知";
+                window.liarAutoCallPending = false; 
+                document.getElementById('liar-controls').classList.remove('hidden'); 
+
+                let playerName = curPlayer ? curPlayer.name : "未知玩家";
+                if (!curPlayer || curPlayer.status === 'offline') playerName += "(斷線)";
+
                 statusEl.innerHTML = isMyTurn ? 
-                    `<b style="color:#facc15; font-size:1.2em;">👉 輪到你了!</b>` : 
-                    `等待 ${curName} 出牌...`;
+                    `<b style="color:#facc15">🔴 輪到你了！請出牌</b>` : 
+                    `等待 ${playerName} 出牌...`;
             }
 
-            // Buttons
-            if (isMyTurn && !forceCall) {
-                document.getElementById('btn-liar-play').classList.remove('hidden');
-                document.getElementById('btn-liar-call').classList.toggle('hidden', stackSize === 0);
-            } else {
-                document.getElementById('btn-liar-play').classList.add('hidden');
-                document.getElementById('btn-liar-call').classList.add('hidden');
+            if (!forceCall) {
+                const btnCall = document.getElementById('btn-liar-call');
+                const btnPlay = document.getElementById('btn-liar-play');
+                
+                if (!isAnimating && !processingAction) {
+                    btnCall.disabled = false;
+                    btnPlay.disabled = false;
+                }
+                
+                const hasStack = (data.stack && data.stack.length > 0);
+                const isAmAlive = !data.guns[currentUserKey].isDead;
+
+                if (isMyTurn) {
+                    btnPlay.classList.remove('hidden');
+                } else {
+                    btnPlay.classList.add('hidden');
+                }
+
+                let showCall = false;
+                if (hasStack && isAmAlive) {
+                    if (isMyTurn) {
+                        showCall = true;
+                    }
+                    else if (data.anytimeLiar) {
+                        const lastOwner = lastMove ? lastMove.owner : null;
+                        if (currentUserKey !== lastOwner) {
+                            showCall = true;
+                        }
+                    }
+                }
+
+                if (showCall) {
+                    btnCall.classList.remove('hidden');
+                    btnCall.innerText = "LIAR!";
+                } else {
+                    btnCall.classList.add('hidden');
+                }
             }
 
-            // Stack Visual
-            const stackArea = document.getElementById('liar-stack-area');
-            const xrayEl = document.getElementById('xray-display');
             stackArea.innerHTML = "";
-            stackArea.appendChild(xrayEl); // Preserve xray
-            
-            (data.stack||[]).slice(-8).forEach((m, i) => {
-                const c = document.createElement('div');
-                c.className = 'card card-back';
-                c.style.position = 'absolute'; c.style.width = '40px'; c.style.height = '60px';
-                c.style.transform = `rotate(${Math.sin(i*99)*20}deg) translate(${Math.cos(i)*5}px, ${Math.sin(i)*5}px)`;
-                stackArea.appendChild(c);
-            });
-            
-            if (data.lastMove) {
-                const lm = document.getElementById('last-move-info');
-                lm.style.display = 'block';
-                lm.innerText = `${data.lastMove.name} 出了 ${data.lastMove.count} 張`;
-            }
-
-            // Cheat XRay
-            if (isCheatEnabled && stackSize > 0) {
-                const last = data.stack[stackSize - 1];
-                let txt = `[透視] ${last.name}: ` + last.cards.map(c => c.rank==='Joker'?'🤡':c.suit+c.rank).join(' ');
-                xrayEl.innerText = txt;
-                xrayEl.classList.add('visible');
+            if (data.stack) {
+                data.stack.forEach((move, i) => {
+                    if (i < data.stack.length - 10) return; 
+                    const c = document.createElement('div');
+                    c.className = 'card card-back';
+                    c.style.position = 'absolute';
+                    c.style.width = '40px'; c.style.height = '60px';
+                    c.style.transform = `rotate(${Math.sin(i*99)*20}deg) translate(${Math.cos(i)*5}px, ${Math.sin(i)*5}px)`;
+                    stackArea.appendChild(c);
+                });
+                if (data.lastMove) {
+                    lastMoveInfoEl.innerText = `${data.lastMove.name} 出了 ${data.lastMove.count} 張`;
+                    lastMoveInfoEl.style.display = 'block';
+                } else {
+                    lastMoveInfoEl.style.display = 'none';
+                }
             } else {
-                xrayEl.classList.remove('visible');
+                lastMoveInfoEl.style.display = 'none';
             }
         }
         else if (data.gameState === 'challenge' && !isAnimating) {
-            triggerChallengeAnimation(data);
+             triggerChallengeAnimation(data);
         }
         else if (data.gameState === 'ended') {
             document.getElementById('win-message').innerHTML = `🏆 最後生還者<br>${data.winnerName}`;
             document.getElementById('win-overlay').style.display = 'flex';
         }
 
-        // Render Opponents
         const oppRow = document.getElementById('liar-opponents');
         oppRow.innerHTML = "";
         playerKeys.forEach(k => {
             if (k === currentUserKey) return;
             const u = users[k];
-            const gun = data.guns[k] || {chamber:0, isDead:false};
-            const handSize = data.hands[k] ? data.hands[k].length : 0;
+            const safeName = u ? u.name : "Unknown";
             const isOffline = !u || u.status === 'offline';
             
-            const div = document.createElement('div');
-            let statusClass = (k === playerKeys[data.turnIndex]) ? "active" : "";
-            if (gun.isDead) statusClass += " dead";
+            const handSize = data.hands && data.hands[k] ? data.hands[k].length : 0;
+            const gun = data.guns ? data.guns[k] : {chamber:0, isDead:false};
+            
+            let statusClass = "";
+            if (k === playerKeys[data.turnIndex]) statusClass = "active";
+            if (gun.isDead) statusClass = "dead";
+            if (!gun.isDead && handSize === 0 && data.gameState === 'playing') statusClass = "escaped"; 
             if (isOffline) statusClass += " offline";
 
-            let bullets = "";
-            for(let i=0; i<6; i++) bullets += `<div class="bullet-slot ${i < gun.chamber ? 'fired' : 'live'}"></div>`;
-
+            const div = document.createElement('div');
             div.className = `opponent ${statusClass}`;
+            
+            let bulletsHTML = "";
+            for(let i=0; i<6; i++) {
+                let bClass = (i < gun.chamber) ? "fired" : "live";
+                bulletsHTML += `<div class="bullet-slot ${bClass}"></div>`;
+            }
+
             div.innerHTML = `
-                <div style="font-size:0.8em; overflow:hidden; white-space:nowrap; color:white;">${u?.name||'Unknown'}</div>
+                <div style="font-size:0.8em; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; color:white;">
+                    ${safeName} ${isOffline ? '<span style="font-size:0.8em; color:#94a3b8;">(離線)</span>' : ''}
+                </div>
                 <div style="font-size:1.5em; margin:5px 0;">🃏 ${handSize}</div>
-                <div class="cylinder-display">${bullets}</div>
+                <div class="cylinder-display">${bulletsHTML}</div>
                 ${gun.isDead ? '<span style="position:absolute; top:30%; left:25%; font-size:2em;">💀</span>' : ''}
+                ${statusClass.includes('escaped') ? '<span style="position:absolute; top:30%; left:20%; font-size:1.5em; color:#10b981; font-weight:bold;">SAFE</span>' : ''}
             `;
             oppRow.appendChild(div);
         });
+        
+        const myGunInfo = data.guns ? data.guns[currentUserKey] : {chamber:0, isDead:false};
+        if (myGunDiv && data.gameState !== 'waiting') {
+            let bulletsHTML = "";
+            for(let i=0; i<6; i++) {
+                let bClass = (i < myGunInfo.chamber) ? "fired" : "live";
+                bulletsHTML += `<div class="bullet-slot ${bClass}"></div>`;
+            }
+            myGunDiv.innerHTML = `
+                <div style="font-size:0.8em; margin-bottom:5px;">我的左輪</div>
+                <div class="cylinder-display">${bulletsHTML}</div>
+                <div style="font-size:0.7em; margin-top:3px; color:#94a3b8;">
+                    ${myGunInfo.isDead ? '已死亡' : `剩餘機率: 1/${6 - myGunInfo.chamber}`}
+                </div>
+            `;
+            if (myGunInfo.isDead) myGunDiv.style.borderColor = "red";
+            else myGunDiv.style.borderColor = "#4b5563";
+        }
 
-        // My Hand
+
         const myHandDiv = document.getElementById('liar-my-hand');
+        const myCards = (data.hands && data.hands[currentUserKey]) || [];
         myHandDiv.innerHTML = "";
-        const myCards = data.hands[currentUserKey] || [];
-        // Reset selection if invalid
-        if (selectedLiarCards.some(i => i >= myCards.length)) selectedLiarCards = [];
+        
+        if (selectedLiarCards.some(idx => idx >= myCards.length)) selectedLiarCards = [];
 
         myCards.forEach((c, i) => {
             const div = document.createElement('div');
             div.className = `card ${['♥','♦'].includes(c.suit)?'red':'black'} ${c.rank==='Joker'?'joker':''}`;
             if (selectedLiarCards.includes(i)) div.classList.add('selected');
-            div.innerHTML = c.rank==='Joker' ? '🤡<br>JK' : `${c.suit}<br>${c.rank}`;
+            
+            if (c.rank === 'Joker') div.innerHTML = '🤡<br>Joker';
+            else div.innerHTML = `${c.suit}<br>${c.rank}`;
+            
             div.onclick = () => {
-                if (data.gameState !== 'playing' || isAnimating || processingAction) return;
+                if (data.gameState !== 'playing') return;
+                if (isAnimating || processingAction) return;
+                if (statusEl.innerHTML.includes("強制") || window.liarAutoCallPending || statusEl.innerHTML.includes("Liar!")) return; 
+                
                 const idx = selectedLiarCards.indexOf(i);
-                if (idx >= 0) selectedLiarCards.splice(idx, 1);
-                else {
-                    if (selectedLiarCards.length >= 3) return alert("最多3張");
+                if (idx >= 0) {
+                    selectedLiarCards.splice(idx, 1);
+                    div.classList.remove('selected');
+                } else {
+                    if (selectedLiarCards.length >= 3) return alert("最多出3張");
                     selectedLiarCards.push(i);
+                    div.classList.add('selected');
                 }
-                div.classList.toggle('selected');
             };
             myHandDiv.appendChild(div);
         });
-
-        // My Gun
-        const myGun = data.guns[currentUserKey];
-        if (myGun) {
-            let bullets = "";
-            for(let i=0; i<6; i++) bullets += `<div class="bullet-slot ${i < myGun.chamber ? 'fired' : 'live'}"></div>`;
-            document.getElementById('my-gun-status').innerHTML = `
-                <div style="font-size:0.8em;">我的左輪</div>
-                <div class="cylinder-display">${bullets}</div>
-                <div style="font-size:0.7em; color:#94a3b8;">${myGun.isDead?'死亡':`剩餘: 1/${6-myGun.chamber}`}</div>
-            `;
-            if (myGun.isDead) {
-                statusEl.innerHTML = "<b style='color:red'>💀 你已死亡</b>";
-                document.getElementById('liar-controls').classList.add('hidden');
-            }
+        
+        const myGun = data.guns && data.guns[currentUserKey];
+        if (myGun && myGun.isDead) {
+             statusEl.innerHTML = "<b style='color:red'>💀 你已死亡</b>";
+             document.getElementById('liar-controls').classList.add('hidden');
         }
     }
 
-    // --- Core Game Functions ---
-    window.startLiarGame = () => {
-        if (isAnimating) return;
-        const users = roomDataCache.users || {};
-        const activePlayers = Object.keys(users).filter(k => users[k].status !== 'offline');
-        if (activePlayers.length < 2) return alert("人數不足 (至少2人)");
+    function checkLiarTurnSkip(data, curPlayerKey, curPlayer) {
+        const myGun = data.guns && data.guns[currentUserKey];
+        if (!myGun || myGun.isDead) return;
 
-        let suitCount = 6, jokerCount = 2;
-        if (activePlayers.length >= 5) { suitCount = 8; jokerCount = 4; } // Big deck for 5+
+        const isCurrentInvalid = !curPlayer || curPlayer.status === 'offline';
+        const isCurrentDead = data.guns && data.guns[curPlayerKey] && data.guns[curPlayerKey].isDead;
 
-        const ranks = ['A', 'Q', 'K'];
-        const baseSuits = ['♠', '♥', '♦', '♣'];
-        let deck = [];
-        ranks.forEach(r => { for(let i=0; i<suitCount; i++) deck.push({suit: baseSuits[i%4], rank: r}); });
-        for(let i=0; i<jokerCount; i++) deck.push({suit: '', rank: 'Joker'});
-        deck.sort(() => Math.random()-0.5);
-
-        const hands = {}, guns = {};
-        activePlayers.forEach(p => {
-            hands[p] = deck.splice(0, 5);
-            guns[p] = { chamber: 0, bulletPos: Math.floor(Math.random()*6), isDead: false };
-        });
-
-        update(ref(db, `ongame_room/${currentRoomId}`), {
-            gameState: 'intro', status: 'playing', playerOrder: activePlayers,
-            deckMeta: { suitCount, jokerCount }, hands, guns, deck,
-            stack: [], turnIndex: 0, targetRank: ranks[Math.floor(Math.random()*3)],
-            challengeResult: null
-        });
-
-        // Safe transition
-        setTimeout(() => {
-            // Only update if still in intro to avoid overwriting state
-            get(ref(db, `ongame_room/${currentRoomId}/gameState`)).then(snap => {
-                if(snap.val() === 'intro') update(ref(db, `ongame_room/${currentRoomId}`), { gameState: 'playing' });
-            });
-        }, 3500);
-    };
-
-    window.playLiarCards = () => {
-        if (isAnimating || processingAction) return;
-        if (!selectedLiarCards.length) return alert("請選牌");
-        
-        const myHand = roomDataCache.hands[currentUserKey];
-        let played = isCheatEnabled ? selectedLiarCards.map(() => ({suit: '', rank: 'Joker'})) : selectedLiarCards.map(i => myHand[i]);
-        const newHand = myHand.filter((_, i) => !selectedLiarCards.includes(i));
-        
-        const stack = roomDataCache.stack || [];
-        stack.push({ cards: played, owner: currentUserKey, name: myName, count: played.length });
-        
-        // Find next player
-        const players = roomDataCache.playerOrder;
-        let nextIdx = roomDataCache.turnIndex;
-        let loopCount = 0;
-        const aliveCount = players.filter(p => !roomDataCache.guns[p].isDead).length;
-
-        while(loopCount < players.length * 2) {
-            nextIdx = (nextIdx + 1) % players.length;
-            const pid = players[nextIdx];
-            const pUser = roomDataCache.users[pid];
-            const pGun = roomDataCache.guns[pid];
-            const pHand = roomDataCache.hands[pid] || [];
-
-            if (!pUser || pUser.status === 'offline') { loopCount++; continue; }
-            if (pGun.isDead) { loopCount++; continue; }
-            // Skip empty hand only if 3+ alive
-            if (aliveCount > 2 && pHand.length === 0) { loopCount++; continue; }
+        if (isCurrentInvalid || isCurrentDead) {
+            console.log("偵測到無效/離線/死亡玩家，準備跳過回合:", curPlayerKey);
             
-            break; // Found valid player
-        }
+            const players = data.playerOrder;
+            let myIdx = players.indexOf(currentUserKey);
+            let targetIdx = data.turnIndex;
+            
+            let foundNext = false;
+            let nextValidIdx = targetIdx;
+            let loopCount = 0;
+            
+            while(loopCount < players.length) {
+                nextValidIdx = (nextValidIdx + 1) % players.length;
+                const pk = players[nextValidIdx];
+                const pu = data.users[pk];
+                const pg = data.guns[pk];
+                
+                if (pu && pu.status !== 'offline' && !pg.isDead) {
+                    foundNext = true;
+                    break;
+                }
+                loopCount++;
+            }
 
-        update(ref(db, `ongame_room/${currentRoomId}`), {
-            [`hands/${currentUserKey}`]: newHand,
-            stack: stack, turnIndex: nextIdx,
-            lastMove: { name: myName, count: played.length }
-        });
-        selectedLiarCards = [];
-    };
-
-    window.callLiar = async () => {
-        if (isAnimating || processingAction) return;
-        processingAction = true;
-        document.getElementById('btn-liar-call').disabled = true;
-
-        const roomSnapshot = await get(ref(db, `ongame_room/${currentRoomId}`));
-        const rData = roomSnapshot.val();
-        
-        if (!rData.stack || rData.stack.length === 0) {
-            processingAction = false; document.getElementById('btn-liar-call').disabled = false; return;
-        }
-
-        const lastEntry = rData.stack[rData.stack.length - 1];
-        // Joker protects from lying. Joker != Target is True. Joker != Joker is False. True && False = False (Not a lie).
-        const isLiar = lastEntry.cards.some(c => c.rank !== rData.targetRank && c.rank !== 'Joker');
-        
-        const loserId = isLiar ? lastEntry.owner : currentUserKey;
-        const loserName = rData.users[loserId]?.name || "未知";
-        const gun = rData.guns[loserId];
-        const died = (gun.chamber === gun.bulletPos);
-
-        const updates = {};
-        updates[`guns/${loserId}/chamber`] = gun.chamber + 1;
-        if(died) updates[`guns/${loserId}/isDead`] = true;
-        updates['challengeResult'] = { cards: lastEntry.cards, isLiar, loser: loserId, loserName };
-        updates['gameState'] = 'challenge';
-        
-        await update(ref(db, `ongame_room/${currentRoomId}`), updates);
-        // Note: processingAction stays true until animation finishes
-    };
-
-    function checkLiarTurnSkip(data, curPlayerKey) {
-        // If current player is offline/dead, force skip.
-        // We only want ONE person to trigger this.
-        const users = data.users || {};
-        const curUser = users[curPlayerKey];
-        const curGun = data.guns[curPlayerKey];
-
-        const isInvalid = !curUser || curUser.status === 'offline';
-        const isDead = curGun && curGun.isDead;
-
-        if (isInvalid || isDead) {
-             // Find next valid player to see if *I* am responsible for skipping
-             const players = data.playerOrder;
-             let nextValidIdx = data.turnIndex;
-             let loopCount = 0;
-             let foundMe = false;
-             
-             while(loopCount < players.length) {
-                 nextValidIdx = (nextValidIdx + 1) % players.length;
-                 const pk = players[nextValidIdx];
-                 if (pk === currentUserKey && !data.guns[pk].isDead) { foundMe = true; break; } // I am next valid
-                 if (users[pk] && users[pk].status !== 'offline' && !data.guns[pk].isDead) break; // Someone else is next valid
-                 loopCount++;
-             }
-
-             if (foundMe) {
-                 console.log("Skipping invalid player...");
-                 update(ref(db, `ongame_room/${currentRoomId}`), { turnIndex: nextValidIdx });
-             }
+            if (foundNext && nextValidIdx === myIdx) {
+                 update(ref(db, `ongame_room/${currentRoomId}`), {
+                    turnIndex: nextValidIdx
+                });
+            }
         }
     }
 
-    // --- Animation & Transitions ---
-    function renderIntroDeck(meta) {
+    function renderIntroDeck() {
+        const overlay = document.getElementById('intro-overlay');
         const grid = document.getElementById('intro-grid');
-        if (grid.children.length > 0) {
-             document.getElementById('intro-overlay').style.display = 'flex';
-             return; 
+        const side = document.getElementById('intro-side');
+        overlay.style.display = 'flex';
+        grid.innerHTML = "";
+        side.innerHTML = "";
+
+        let suitCount = 6;
+        let jokerCount = 2;
+        if (roomDataCache && roomDataCache.deckMeta) {
+            suitCount = roomDataCache.deckMeta.suitCount;
+            jokerCount = roomDataCache.deckMeta.jokerCount;
         }
-        document.getElementById('intro-overlay').style.display = 'flex';
-        grid.innerHTML = ""; document.getElementById('intro-side').innerHTML = "";
+
+        grid.style.gridTemplateColumns = `repeat(${suitCount}, 1fr)`;
+
+        const baseSuits = ['♠', '♥', '♦', '♣'];
         
-        let sc = meta?.suitCount || 6, jc = meta?.jokerCount || 2;
-        grid.style.gridTemplateColumns = `repeat(${sc}, 1fr)`;
-        const suits = ['♠','♥','♦','♣'];
-        
-        ['A','Q','K'].forEach((r, ri) => {
-            for(let i=0; i<sc; i++) {
-                const d = document.createElement('div');
-                d.className = `intro-card-sm ${['♥','♦'].includes(suits[i%4])?'red':'black'}`;
-                d.innerText = suits[i%4]+r;
-                d.style.animationDelay = (i*0.05 + ri*0.3)+'s';
-                grid.appendChild(d);
+        ['A', 'Q', 'K'].forEach((rank, rIdx) => {
+            for(let i = 0; i < suitCount; i++) {
+                const suit = baseSuits[i % 4];
+                const div = document.createElement('div');
+                div.className = `intro-card-sm ${['♥','♦'].includes(suit)?'red':'black'}`;
+                div.innerText = suit + rank;
+                div.style.animationDelay = (i * 0.05 + rIdx * 0.3) + 's';
+                grid.appendChild(div);
             }
         });
-        for(let i=0; i<jc; i++) {
-            const d = document.createElement('div');
-            d.className = 'intro-card-sm joker';
-            d.innerText = 'JK'; d.style.color='#8e44ad';
-            d.style.animationDelay = (1+i*0.2)+'s';
-            document.getElementById('intro-side').appendChild(d);
+
+        for(let i = 0; i < jokerCount; i++) {
+            const div = document.createElement('div');
+            div.className = 'intro-card-sm joker';
+            div.innerText = 'JK';
+            div.style.color = '#8e44ad';
+            div.style.animationDelay = (1 + i * 0.2) + 's';
+            side.appendChild(div);
         }
     }
 
     async function triggerChallengeAnimation(data) {
-        isAnimating = true;
+        if (isAnimating) return;
+        isAnimating = true; 
+
         const res = data.challengeResult;
         const overlay = document.getElementById('liar-reveal-overlay');
         const container = document.getElementById('reveal-cards-container');
         const verdict = document.getElementById('reveal-verdict');
         
         overlay.style.display = 'flex';
-        container.innerHTML = ""; verdict.innerHTML = "";
+        container.innerHTML = "";
+        verdict.innerHTML = "";
         
-        res.cards.forEach(c => {
-            container.innerHTML += `
-                <div class="reveal-card-wrapper">
-                    <div class="reveal-back"></div>
-                    <div class="reveal-face ${['♥','♦'].includes(c.suit)?'red':'black'}">
-                        ${c.rank==='Joker'?'🤡': c.suit+c.rank}
-                    </div>
-                </div>`;
+        res.cards.forEach((c, i) => {
+            const wrapper = document.createElement('div');
+            wrapper.className = 'reveal-card-wrapper';
+            wrapper.innerHTML = `
+                <div class="reveal-back"></div>
+                <div class="reveal-face ${['♥','♦'].includes(c.suit)?'red':'black'}">
+                    ${c.rank==='Joker'?'🤡': c.suit + c.rank}
+                </div>
+            `;
+            container.appendChild(wrapper);
         });
 
         await new Promise(r => setTimeout(r, 500));
         const cards = container.children;
+        
         for (let i = 0; i < cards.length; i++) {
             cards[i].classList.add('flipped');
             const cData = res.cards[i];
             const isMatch = (cData.rank === data.targetRank || cData.rank === 'Joker');
+            
             await new Promise(r => setTimeout(r, 600));
-            cards[i].querySelector('.reveal-face').classList.add(isMatch?'correct':'wrong');
+            const face = cards[i].querySelector('.reveal-face');
+            if (isMatch) {
+                face.classList.add('correct');
+            } else {
+                face.classList.add('wrong');
+            }
+            await new Promise(r => setTimeout(r, 400));
         }
 
         verdict.innerHTML = res.isLiar 
@@ -1318,227 +2608,759 @@
             : `<span style="color:#10b981">誠實！抓錯了！</span><br><span style="font-size:0.5em">輸家: ${res.loserName}</span>`;
         
         await new Promise(r => setTimeout(r, 1500));
+
         overlay.style.display = 'none';
-        
-        // Gun Animation
-        const gunOver = document.getElementById('gun-anim-overlay');
+        await triggerGunAnimation(res.loser, res.loserName);
+    }
+
+    async function triggerGunAnimation(loserId, loserName) {
+        const overlay = document.getElementById('gun-anim-overlay');
         const txt = document.getElementById('gun-result-text');
-        const bang = gunOver.querySelector('.bang-visual');
+        const bang = overlay.querySelector('.bang-visual');
         
-        gunOver.style.display = 'flex';
-        txt.innerText = `${res.loserName} 接受制裁...`;
-        bang.style.opacity = 0; bang.classList.remove('bang-animate');
+        overlay.style.display = 'flex';
+        txt.innerText = `${loserName} 接受制裁...`;
+        bang.style.opacity = 0;
+        bang.classList.remove('bang-animate');
 
         await new Promise(r => setTimeout(r, 1500)); 
-        gunOver.classList.add('shaking'); bang.classList.add('bang-animate');
         
-        // Check dead status fresh from DB
-        const freshSnap = await get(ref(db, `ongame_room/${currentRoomId}`));
-        const freshData = freshSnap.val();
-        const pGun = freshData.guns[res.loser];
-
+        overlay.classList.add('shaking');
+        bang.classList.add('bang-animate');
+        
+        const roomSnapshot = await get(ref(db, `ongame_room/${currentRoomId}`));
+        const rData = roomSnapshot.val();
+        const playerGun = rData.guns[loserId];
+        
         await new Promise(r => setTimeout(r, 500));
-        gunOver.classList.remove('shaking');
-        txt.innerHTML = pGun.isDead ? 
-            `<span style="color:red; font-size:1.5em;">💀 死亡 💀</span>` : 
-            `<span style="color:#10b981">倖存 (空包彈)</span><br>剩餘: ${6 - pGun.chamber}發`;
-
-        await new Promise(r => setTimeout(r, 2000));
-        gunOver.style.display = 'none';
+        overlay.classList.remove('shaking');
         
-        // Trigger Next Round (Safety Check)
-        // Find ANY valid online player to trigger the next round, not just player[0]
-        const validPlayers = freshData.playerOrder.filter(k => 
-            freshData.users[k] && freshData.users[k].status !== 'offline' && !freshData.guns[k].isDead
-        );
-        
-        // If I am the first valid player in the list, I trigger it.
-        if (validPlayers.length > 0 && validPlayers[0] === currentUserKey) {
-            nextLiarRound(freshData);
-        } else if (validPlayers.length === 0) {
-            // Everyone dead/offline? Game Over.
-             update(ref(db, `ongame_room/${currentRoomId}`), { gameState: 'ended', winnerName: "無人生還" });
+        if (playerGun.isDead) {
+            txt.innerHTML = `<span style="color:red; font-size:1.5em;">💀 死亡 💀</span>`;
+        } else {
+            txt.innerHTML = `<span style="color:#10b981">恭喜倖存😎(空包彈)</span><br>剩餘: ${6 - playerGun.chamber}發`;
         }
 
-        isAnimating = false;
-        processingAction = false;
-        document.getElementById('btn-liar-call').disabled = false;
+        await new Promise(r => setTimeout(r, 2000));
+        overlay.style.display = 'none';
+        
+        const players = rData.playerOrder;
+        if (players[0] === currentUserKey) {
+            nextLiarRound(rData);
+        }
+        
+        isAnimating = false; 
+        processingAction = false; 
     }
+
+    window.startLiarGame = () => {
+        if (isAnimating || processingAction) return; 
+
+        const users = roomDataCache.users || {};
+        const activePlayers = Object.entries(users)
+            .filter(([k, u]) => u.status !== 'offline')
+            .map(([k, u]) => k);
+            
+        const playerCount = activePlayers.length;
+        if (playerCount < 2) {
+             alert("人數不足，至少需要2位在線玩家");
+             return;
+        }
+        
+        let suitCount = 6; 
+        let jokerCount = 2;
+
+        if (playerCount >= 5) {
+            suitCount = 8;
+            jokerCount = 4;
+            
+            while ((suitCount * 3 + jokerCount) < (playerCount * 5)) {
+                suitCount++;
+                if (suitCount % 2 === 0) jokerCount++;
+            }
+        }
+
+        const ranks = ['A', 'Q', 'K'];
+        const baseSuits = ['♠', '♥', '♦', '♣'];
+        
+        let deck = [];
+        
+        ranks.forEach(r => {
+            for (let i = 0; i < suitCount; i++) {
+                deck.push({suit: baseSuits[i % 4], rank: r});
+            }
+        });
+        
+        for (let i = 0; i < jokerCount; i++) {
+            deck.push({suit: '', rank: 'Joker'});
+        }
+
+        deck.sort(() => Math.random() - 0.5);
+
+        const hands = {};
+        activePlayers.forEach(p => {
+            if (deck.length >= 5) {
+                hands[p] = deck.splice(0, 5);
+            } else {
+                hands[p] = deck.splice(0, deck.length); 
+            }
+        });
+        
+        const guns = {};
+        activePlayers.forEach(p => guns[p] = { chamber: 0, bulletPos: Math.floor(Math.random()*6), isDead: false });
+
+        update(ref(db, `ongame_room/${currentRoomId}`), {
+            gameState: 'intro',
+            status: 'playing', 
+            playerOrder: activePlayers,
+            deckMeta: { suitCount, jokerCount }
+        });
+
+        setTimeout(() => {
+            update(ref(db, `ongame_room/${currentRoomId}`), {
+                gameState: 'playing', deck, hands, guns, stack: [],
+                turnIndex: 0, targetRank: ranks[Math.floor(Math.random()*3)],
+                challengeResult: null
+            });
+        }, 3500);
+    };
+
+    window.playLiarCards = () => {
+        if (isAnimating || processingAction) return; 
+        if (!selectedLiarCards.length) return alert("請選牌");
+        
+        const myHand = roomDataCache.hands[currentUserKey];
+        const played = selectedLiarCards.map(i => myHand[i]);
+        const newHand = myHand.filter((_, i) => !selectedLiarCards.includes(i));
+        
+        const stack = roomDataCache.stack || [];
+        stack.push({ cards: played, owner: currentUserKey, name: myName, count: played.length });
+        
+        const players = roomDataCache.playerOrder;
+        
+        let nextIdx = roomDataCache.turnIndex;
+        let found = false;
+        let loopCount = 0;
+        
+        const aliveCount = players.filter(p => !roomDataCache.guns[p].isDead).length;
+
+        while (loopCount < players.length) {
+            nextIdx = (nextIdx + 1) % players.length;
+            const pId = players[nextIdx];
+            const gun = roomDataCache.guns[pId];
+            const pHand = roomDataCache.hands[pId] || []; 
+            const pUser = roomDataCache.users[pId];
+
+            if (!pUser || pUser.status === 'offline') {
+                loopCount++;
+                continue;
+            }
+            
+            if (gun.isDead) {
+                loopCount++;
+                continue;
+            }
+
+            if (aliveCount > 2 && pHand.length === 0) {
+                 loopCount++;
+                 continue; 
+            }
+            
+            found = true;
+            break;
+        }
+
+        if (!found) {
+            console.warn("找不到下一位玩家");
+        }
+
+        update(ref(db, `ongame_room/${currentRoomId}`), {
+            [`hands/${currentUserKey}`]: newHand,
+            stack: stack,
+            turnIndex: nextIdx,
+            lastMove: { name: myName, count: played.length }
+        });
+        selectedLiarCards = [];
+    };
+
+    window.callLiar = async () => {
+        if (isAnimating || processingAction) return; 
+        
+        const btnCall = document.getElementById('btn-liar-call');
+        if(btnCall) btnCall.disabled = true;
+        processingAction = true;
+
+        const roomSnapshot = await get(ref(db, `ongame_room/${currentRoomId}`));
+        const rData = roomSnapshot.val();
+
+        if (!rData || !rData.stack || rData.stack.length === 0 || rData.gameState !== 'playing') {
+            processingAction = false;
+            if(btnCall) btnCall.disabled = false;
+            return;
+        }
+
+        const stack = rData.stack;
+        const lastEntry = stack[stack.length - 1];
+        const target = rData.targetRank;
+        
+        if (rData.anytimeLiar && lastEntry.owner === currentUserKey) {
+             processingAction = false;
+             if(btnCall) btnCall.disabled = false;
+             return alert("不能抓自己！");
+        }
+
+        let isLiar = lastEntry.cards.some(c => c.rank !== target && c.rank !== 'Joker');
+        
+        const loserId = isLiar ? lastEntry.owner : currentUserKey;
+        const loserUser = rData.users[loserId];
+        const loserName = loserUser ? loserUser.name : "未知玩家";
+
+        const gun = rData.guns[loserId];
+        const died = (gun.chamber === gun.bulletPos);
+        const updates = {};
+        
+        updates[`guns/${loserId}/chamber`] = gun.chamber + 1;
+        if(died) updates[`guns/${loserId}/isDead`] = true;
+        
+        updates['challengeResult'] = {
+            cards: lastEntry.cards, isLiar, loser: loserId, loserName
+        };
+        updates['gameState'] = 'challenge';
+        
+        await update(ref(db, `ongame_room/${currentRoomId}`), updates);
+    };
 
     function nextLiarRound(rData) {
         const players = rData.playerOrder;
         const alive = players.filter(p => !rData.guns[p].isDead);
         
         if (alive.length <= 1) {
-            const winner = alive[0] ? (rData.users[alive[0]]?.name || "倖存者") : "無人";
-            update(ref(db, `ongame_room/${currentRoomId}`), { gameState: 'ended', winnerName: winner });
+            const winnerId = alive[0];
+            const winnerUser = rData.users[winnerId];
+            const winnerName = winnerUser ? winnerUser.name : "無人";
+            update(ref(db, `ongame_room/${currentRoomId}`), {
+                gameState: 'ended',
+                winnerName: winnerName
+            });
             return;
         }
 
-        let sc = 6, jc = 2;
-        if (alive.length >= 5) { sc = 8; jc = 4; }
-        
+        let suitCount = 6; 
+        let jokerCount = 2;
+        const playerCount = alive.length;
+
+        if (playerCount >= 5) {
+            suitCount = 8;
+            jokerCount = 4;
+            
+            while ((suitCount * 3 + jokerCount) < (playerCount * 5)) {
+                suitCount++;
+                if (suitCount % 2 === 0) jokerCount++;
+            }
+        }
+
         const ranks = ['A', 'Q', 'K'];
-        const suits = ['♠', '♥', '♦', '♣'];
+        const baseSuits = ['♠', '♥', '♦', '♣'];
         let deck = [];
-        ranks.forEach(r => { for(let i=0; i<sc; i++) deck.push({suit: suits[i%4], rank: r}); });
-        for(let i=0; i<jc; i++) deck.push({suit: '', rank: 'Joker'});
-        deck.sort(() => Math.random()-0.5);
+        
+        ranks.forEach(r => {
+            for (let i = 0; i < suitCount; i++) {
+                deck.push({suit: baseSuits[i % 4], rank: r});
+            }
+        });
+        
+        for (let i = 0; i < jokerCount; i++) {
+            deck.push({suit: '', rank: 'Joker'});
+        }
+        deck.sort(() => Math.random() - 0.5);
         
         const hands = {};
         alive.forEach(p => hands[p] = deck.splice(0, 5));
 
-        // Find starter (ensure not offline)
-        let starterIdx = rData.turnIndex;
-        // Simple shift or random
-        let available = alive.filter(k => rData.users[k].status !== 'offline');
-        let starterKey = available.length > 0 ? available[Math.floor(Math.random()*available.length)] : alive[0];
-        starterIdx = players.indexOf(starterKey);
+        let availableStarters = alive.filter(p => rData.users[p] && rData.users[p].status !== 'offline');
+        if (availableStarters.length === 0) availableStarters = alive;
+
+        const starter = availableStarters[Math.floor(Math.random()*availableStarters.length)];
+        const startIdx = players.indexOf(starter);
 
         update(ref(db, `ongame_room/${currentRoomId}`), {
             gameState: 'playing', hands, deck, stack: [],
             targetRank: ranks[Math.floor(Math.random()*3)],
-            turnIndex: starterIdx, challengeResult: null,
-            deckMeta: { suitCount: sc, jokerCount: jc }
+            turnIndex: startIdx, challengeResult: null,
+            deckMeta: { suitCount, jokerCount } 
         });
     }
-
-    // --- Helpers ---
-    function renderC4Board(data) {
+    
+    // --- 輔助函式 ---
+    function renderC4Board(data, rows, cols) {
         const boardDiv = document.getElementById('c4-board');
-        boardDiv.style.gridTemplateColumns = `repeat(${data.cols}, var(--c4-cell-size))`;
-        const size = data.cols > 10 ? '30px' : (data.cols > 7 ? '35px' : '45px');
+        boardDiv.style.gridTemplateColumns = `repeat(${cols}, var(--c4-cell-size))`;
+        const size = cols > 10 ? '30px' : (cols > 7 ? '35px' : '45px');
         document.documentElement.style.setProperty('--c4-cell-size', size);
         boardDiv.innerHTML = "";
         data.board.forEach((val, i) => {
             const cell = document.createElement('div');
             cell.className = 'c4-cell';
             if(val > 0) cell.innerHTML = `<div class="piece p${val}"></div>`;
-            cell.onclick = () => {
-                if(data.board[i] !== 0) return; 
-                // C4 Logic
-                for (let r = data.rows - 1; r >= 0; r--) {
-                    const idx = r * data.cols + (i % data.cols);
-                    if (data.board[idx] === 0) {
-                        const newB = [...data.board]; newB[idx] = (data.turn % 2) + 1;
-                        update(ref(db, `ongame_room/${currentRoomId}`), { board: newB, turn: data.turn+1 });
-                        break;
-                    }
-                }
-            };
-            boardDiv.appendChild(cell);
-        });
-    }
-    
-    function renderTTTBoard(data) {
-        const boardDiv = document.getElementById('ttt-board');
-        boardDiv.style.gridTemplateColumns = `repeat(${data.cols}, 1fr)`;
-        boardDiv.innerHTML = "";
-        data.board.forEach((val, i) => {
-            const cell = document.createElement('div');
-            cell.className = 'ttt-cell';
-            cell.innerText = val;
-            cell.onclick = () => {
-                if(val !== "") return;
-                const newB = [...data.board]; 
-                const sym = data.turn%2===0 ? "X":"O";
-                newB[i] = sym;
-                
-                let history = data.history || [];
-                let moves = data.moves || [];
-                
-                if (data.type === 'ttt-infinite') {
-                    moves.push({index:i, player:sym});
-                    if (moves.filter(m=>m.player===sym).length > 3) {
-                         const rem = moves.find(m=>m.player===sym);
-                         newB[rem.index] = "";
-                         moves = moves.filter(m=>m!==rem);
-                    }
-                    update(ref(db, `ongame_room/${currentRoomId}`), { board: newB, turn: data.turn+1, moves, history: [...history, {board:newB, moves}] });
-                } else {
-                    update(ref(db, `ongame_room/${currentRoomId}`), { board: newB, turn: data.turn+1, history: [...history, newB] });
-                }
-            };
+            cell.onclick = () => dropC4(i % cols, rows, cols);
             boardDiv.appendChild(cell);
         });
     }
 
-    function checkBoardWinner(data) {
-        if(data.type === 'liar') return;
-        const rows=data.rows, cols=data.cols, target=data.winCondition;
-        const getCell = (r,c) => (r<0||r>=rows||c<0||c>=cols) ? null : data.board[r*cols+c];
-        const dirs = [[0,1],[1,0],[1,1],[1,-1]];
-        let winner = null;
-        
-        for(let r=0; r<rows; r++) {
-            for(let c=0; c<cols; c++) {
-                const cell = getCell(r,c);
-                if(!cell || cell===0) continue;
-                for(let [dr,dc] of dirs) {
-                    let cnt=1;
-                    for(let k=1; k<target; k++) if(getCell(r+dr*k, c+dc*k)===cell) cnt++; else break;
-                    if(cnt===target) winner = cell;
-                }
+    function renderTTTBoard(data, rows, cols) {
+        const boardDiv = document.getElementById('ttt-board');
+        boardDiv.style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
+        boardDiv.innerHTML = "";
+        let indexToFade = -1;
+        if (data.type === 'ttt-infinite' && data.moves) {
+            const moves = data.moves;
+            const currentSymbol = (data.turn % 2 === 0) ? 'X' : 'O';
+            const myMoves = moves.filter(m => m.player === currentSymbol);
+            if (myMoves.length >= 3) indexToFade = myMoves[0].index;
+        }
+        data.board.forEach((val, i) => {
+            const cell = document.createElement('div');
+            cell.className = 'ttt-cell';
+            if (i === indexToFade) cell.classList.add('about-to-die');
+            cell.innerText = val;
+            cell.onclick = () => clickTTT(i);
+            boardDiv.appendChild(cell);
+        });
+    }
+
+    window.dropC4 = (col, rows, cols) => {
+        if(roomDataCache.type !== 'c4') return;
+        const board = [...roomDataCache.board];
+        for (let r = rows - 1; r >= 0; r--) {
+            const index = r * cols + col;
+            if (board[index] === 0) {
+                board[index] = (roomDataCache.turn % 2) + 1;
+                updateMove(board);
+                break;
             }
         }
-        if (winner) {
-            const name = Object.values(data.users)[winner===1||winner==='X'?0:1]?.name || "Winner";
-            document.getElementById('win-message').innerText = `🎉 ${name} 獲勝!`;
-            document.getElementById('win-overlay').style.display = 'flex';
+    }
+    
+    window.clickTTT = (i) => {
+        if(roomDataCache.type === 'c4' || roomDataCache.type === 'liar') return;
+        if (roomDataCache.board[i] !== "") return;
+        const isInfinite = (roomDataCache.type === 'ttt-infinite');
+        const board = [...roomDataCache.board];
+        const currentPlayer = roomDataCache.turn % 2 === 0 ? "X" : "O";
+        let newMoves = isInfinite ? (roomDataCache.moves ? [...roomDataCache.moves] : []) : null;
+        
+        board[i] = currentPlayer;
+        if (isInfinite) {
+            newMoves.push({ index: i, player: currentPlayer });
+            const myMoves = newMoves.filter(m => m.player === currentPlayer);
+            if (myMoves.length > 3) {
+                const moveToRemove = myMoves[0];
+                board[moveToRemove.index] = "";
+                const realIndex = newMoves.indexOf(moveToRemove);
+                if (realIndex > -1) newMoves.splice(realIndex, 1);
+            }
+            updateMove(board, newMoves);
+        } else {
+            updateMove(board);
+        }
+    }
+
+    function updateMove(newBoard, newMoves = null) {
+        const history = roomDataCache.history || [];
+        const isInfinite = (roomDataCache.type === 'ttt-infinite');
+        if (isInfinite) {
+            history.push({ board: newBoard, moves: newMoves });
+            update(ref(db, `ongame_room/${currentRoomId}`), { board: newBoard, moves: newMoves, turn: roomDataCache.turn + 1, history: history });
+        } else {
+            history.push(newBoard);
+            update(ref(db, `ongame_room/${currentRoomId}`), { board: newBoard, turn: roomDataCache.turn + 1, history: history });
         }
     }
 
     window.undoStep = () => {
-        const h = roomDataCache.history || [];
-        if (h.length <= 1) return;
-        h.pop();
-        const prev = h[h.length-1];
-        if(roomDataCache.type==='ttt-infinite') update(ref(db, `ongame_room/${currentRoomId}`), { board: prev.board, moves: prev.moves, turn: roomDataCache.turn-1, history: h });
-        else update(ref(db, `ongame_room/${currentRoomId}`), { board: prev, turn: roomDataCache.turn-1, history: h });
+        const history = roomDataCache.history || [];
+        if (history.length <= 1) return alert("不能再退了！");
+        history.pop();
+        const lastState = history[history.length - 1];
+        const isInfinite = (roomDataCache.type === 'ttt-infinite');
+        if (isInfinite) {
+            update(ref(db, `ongame_room/${currentRoomId}`), { board: lastState.board||lastState, moves: lastState.moves||[], turn: roomDataCache.turn - 1, history: history });
+        } else {
+            update(ref(db, `ongame_room/${currentRoomId}`), { board: lastState, turn: roomDataCache.turn - 1, history: history });
+        }
     };
 
+    // =========================================
+    // --- 騙子桌遊 作弊模式 (Liar Cheat Mode) ---
+    // =========================================
+    let liarCheatMode = false;
+
+    window.toggleLiarCheat = () => {
+        liarCheatMode = !liarCheatMode;
+        const btn = document.getElementById('liar-cheat-btn');
+        btn.textContent = liarCheatMode ? 'ON' : 'OFF';
+        btn.className = liarCheatMode ? 'cheat-on' : 'cheat-off';
+        // 直接更新顯示，不需要完整重新渲染
+        updateLiarCheatView(roomDataCache);
+    };
+
+    // 修補 playLiarCards：在 cheatMode 時強制出安全牌
+    const _origPlayLiarCards = window.playLiarCards;
+    window.playLiarCards = () => {
+        if (liarCheatMode && roomDataCache && selectedLiarCards.length > 0) {
+            const data = roomDataCache;
+            const myHand = data.hands[currentUserKey];
+            const targetRank = data.targetRank;
+            if (myHand && targetRank) {
+                // 直接把選中的牌的 rank 改成 targetRank（保留 suit，讓花色看起來正常）
+                // 這樣 playLiarCards 讀到的 played 就是安全牌，抓謊時也不會被判作弊
+                selectedLiarCards.forEach(i => {
+                    if (myHand[i] && myHand[i].rank !== 'Joker') {
+                        myHand[i] = { ...myHand[i], rank: targetRank };
+                    }
+                    // Joker 保留不動（本身就是安全牌）
+                });
+            }
+        }
+        _origPlayLiarCards();
+    };
+
+    // 在 renderLiarGame 渲染完之後，補充作弊視圖
+    // 我們在 renderLiarGame 末端插入邏輯（透過 MutationObserver 不合適，直接 patch renderLiarGame）
+    const _origRenderLiarGame = renderLiarGame;
+    // 注意：renderLiarGame 是 function declaration，不能直接 override window，
+    // 所以我們改在 renderLiarGame 內部末端呼叫 updateLiarCheatView。
+    // 改用在 onValue 回呼時呼叫的方式，略有延遲。
+
+    function updateLiarCheatView(data) {
+        const revealDiv = document.getElementById('liar-cheat-reveal');
+        if (!revealDiv) return;
+
+        // OFF 狀態：一定隱藏
+        if (!liarCheatMode) {
+            revealDiv.style.display = 'none';
+            return;
+        }
+
+        // ON 狀態：必須有牌堆才顯示內容
+        if (!data || data.gameState !== 'playing') {
+            revealDiv.style.display = 'none';
+            return;
+        }
+        const stack = data.stack;
+        if (!stack || stack.length === 0) {
+            revealDiv.innerHTML = '🔍 牌堆實際: （尚無出牌）';
+            revealDiv.style.display = 'block';
+            return;
+        }
+
+        const lastMove = stack[stack.length - 1];
+        if (!lastMove || !lastMove.cards) {
+            revealDiv.style.display = 'none';
+            return;
+        }
+
+        const cards = lastMove.cards;
+        const targetRank = data.targetRank;
+        const label = cards.map(c => {
+            const real = (c.rank === 'Joker') ? '🤡Joker' : `${c.suit}${c.rank}`;
+            const safe = (c.rank === targetRank || c.rank === 'Joker');
+            return `<span style="color:${safe ? '#34d399' : '#f87171'}">${real}</span>`;
+        }).join(' | ');
+
+        revealDiv.innerHTML = `🔍 牌堆實際: ${label}`;
+        revealDiv.style.display = 'block';
+    }
+
+    // =========================================
+    // --- UNO 編輯牌功能 ---
+    // =========================================
+    let unoEditTargetIndex = -1;   // 目前選中要編輯的牌 index
+    let unoEditSelColor = null;
+    let unoEditSelType = null;
+    let unoEditSelValue = null;
+
+    window.openUnoEditModal = () => {
+        const modal = document.getElementById('uno-edit-modal');
+        const body = document.getElementById('uno-edit-body');
+        const hint = document.getElementById('uno-edit-hint');
+        const noSel = document.getElementById('uno-edit-no-select');
+
+        // 重置狀態
+        unoEditSelColor = null;
+        unoEditSelType = null;
+        unoEditSelValue = null;
+
+        // 清除舊選取樣式
+        document.querySelectorAll('.uno-edit-option').forEach(el => el.classList.remove('selected-edit'));
+        document.querySelectorAll('.uno-edit-color-btn').forEach(el => el.classList.remove('selected-color'));
+
+        // 確認是否有選牌
+        if (unoSelectedIndices.length > 0) {
+            unoEditTargetIndex = unoSelectedIndices[0]; // 只編輯第一張選中的牌
+            hint.classList.add('hidden');
+            body.classList.remove('hidden');
+            noSel.classList.add('hidden');
+        } else {
+            unoEditTargetIndex = -1;
+            hint.classList.remove('hidden');
+            body.classList.add('hidden');
+            noSel.classList.remove('hidden');
+        }
+
+        modal.classList.remove('hidden');
+    };
+
+    window.closeUnoEditModal = () => {
+        document.getElementById('uno-edit-modal').classList.add('hidden');
+    };
+
+    window.unoEditSelectColor = (color) => {
+        unoEditSelColor = color;
+        document.querySelectorAll('.uno-edit-color-btn').forEach(el => {
+            el.classList.toggle('selected-color', el.dataset.color === color);
+        });
+        // 萬用牌強制黑色
+        if (unoEditSelType === 'wild' || unoEditSelType === 'wild4') {
+            unoEditSelColor = 'black';
+        }
+    };
+
+    window.unoEditSelectType = (type, value) => {
+        unoEditSelType = type;
+        unoEditSelValue = value;
+        document.querySelectorAll('.uno-edit-option').forEach(el => {
+            el.classList.toggle('selected-edit', el.dataset.type === type && el.dataset.value === value);
+        });
+        // 若是萬用牌，自動設為黑色並清除顏色選取
+        if (type === 'wild' || type === 'wild4') {
+            unoEditSelColor = 'black';
+            document.querySelectorAll('.uno-edit-color-btn').forEach(el => el.classList.remove('selected-color'));
+        }
+    };
+
+    window.unoEditConfirm = () => {
+        if (unoEditTargetIndex < 0) { alert('請先選擇一張手牌'); return; }
+        if (!unoEditSelType || !unoEditSelValue) { alert('請選擇牌型'); return; }
+        
+        let finalColor = unoEditSelColor;
+        if (!finalColor) {
+            if (unoEditSelType === 'wild' || unoEditSelType === 'wild4') {
+                finalColor = 'black';
+            } else {
+                alert('請選擇顏色'); return;
+            }
+        }
+
+        const data = roomDataCache;
+        if (!data || !data.hands || !data.hands[currentUserKey]) {
+            alert('無法取得手牌資料，請重試');
+            return;
+        }
+
+        const currentHand = data.hands[currentUserKey];
+        if (unoEditTargetIndex >= currentHand.length) {
+            alert('牌的索引超出範圍，請重新選牌');
+            return;
+        }
+
+        // 用逐 index 的 updates 方式寫入，避免 Firebase 對整個陣列 path 的問題
+        const updates = {};
+        currentHand.forEach((card, i) => {
+            if (i === unoEditTargetIndex) {
+                updates[`ongame_room/${currentRoomId}/hands/${currentUserKey}/${i}`] = {
+                    color: finalColor,
+                    type: unoEditSelType,
+                    value: unoEditSelValue
+                };
+            } else {
+                updates[`ongame_room/${currentRoomId}/hands/${currentUserKey}/${i}`] = card;
+            }
+        });
+
+        unoSelectedIndices = [];
+        unoEditTargetIndex = -1;
+
+        update(ref(db), updates)
+            .then(() => {
+                closeUnoEditModal();
+            })
+            .catch(err => {
+                console.error('編輯牌失敗:', err);
+                alert('更新失敗，請重試');
+            });
+    };
+
+    window.sendMessage = () => {
+        const input = document.getElementById('chatInput');
+        if (!input.value.trim()) return;
+        push(ref(db, `ongame_room/${currentRoomId}/chat`), { user: myName, text: input.value, time: serverTimestamp() });
+        input.value = "";
+    };
+
+    window.editName = () => {
+        const newName = prompt("請輸入您的新暱稱:", myName);
+        if (newName && newName.trim() !== "") {
+            myName = newName.trim();
+            localStorage.setItem('playerName', myName);
+            document.getElementById('myNameDisplay').innerText = myName;
+            if (currentRoomId && currentUserKey) update(ref(db, `ongame_room/${currentRoomId}/users/${currentUserKey}`), { name: myName });
+        }
+    };
+
+    function checkBoardWinner(data) {
+        if(data.type === 'liar') return;
+
+        const rows = data.rows || 3;
+        const cols = data.cols || 3;
+        const winTarget = data.winCondition || 3;
+        const emptyVal = data.type === 'c4' ? 0 : "";
+        const winner = checkWinGeneral(data.board, rows, cols, winTarget, emptyVal);
+        const msgEl = document.getElementById('win-message');
+
+        if (winner) {
+            const userList = Object.values(data.users);
+            let winnerName = (winner === 'X' || winner === 1) ? (userList[0]?.name||"P1") : (userList[1]?.name||"P2");
+            msgEl.innerText = `🎉 恭喜 ${winnerName} 獲勝！ 🎉`;
+            msgEl.style.color = (winner === 'X' || winner === 1) ? '#f87171' : '#facc15';
+            document.getElementById('win-overlay').style.display = 'flex';
+        } else if (data.type !== 'ttt-infinite') {
+            const isFull = data.board.every(c => c !== 0 && c !== "");
+            if (isFull) {
+                msgEl.innerText = `🤝 平手！ 🤝`;
+                msgEl.style.color = "white";
+                document.getElementById('win-overlay').style.display = 'flex';
+            } else {
+                document.getElementById('win-overlay').style.display = 'none';
+            }
+        }
+    }
+
+    function checkWinGeneral(board, rows, cols, target, emptyVal) {
+        const getCell = (r, c) => (r < 0 || r >= rows || c < 0 || c >= cols) ? null : board[r * cols + c];
+        const directions = [[0, 1], [1, 0], [1, 1], [1, -1]];
+        for(let r = 0; r < rows; r++) {
+            for(let c = 0; c < cols; c++) {
+                const current = getCell(r, c);
+                if (current === emptyVal || current === null) continue;
+                for (let [dr, dc] of directions) {
+                    let count = 1;
+                    for (let k = 1; k < target; k++) {
+                        if (getCell(r + dr * k, c + dc * k) === current) count++; else break;
+                    }
+                    if (count === target) return current;
+                }
+            }
+        }
+        return null;
+    }
+
     window.resetGame = () => {
-        if (roomDataCache.type === 'liar') startLiarGame();
-        else {
-            const b = Array(roomDataCache.rows*roomDataCache.cols).fill(roomDataCache.type==='c4'?0:"");
-            update(ref(db, `ongame_room/${currentRoomId}`), { board: b, turn: 0, history: [b], moves: [] });
+        if (!roomDataCache) return;
+        if (roomDataCache.type === 'liar') {
+            startLiarGame(); 
+        } else if (roomDataCache.type === 'uno') {
+            unoResetGame();
+        } else {
+            const rows = roomDataCache.rows || 3;
+            const cols = roomDataCache.cols || 3;
+            const initBoard = roomDataCache.type === 'c4' ? Array(rows*cols).fill(0) : Array(rows*cols).fill("");
+            const history = roomDataCache.type === 'ttt-infinite' ? [{board:initBoard, moves:[]}] : [initBoard];
+            update(ref(db, `ongame_room/${currentRoomId}`), { 
+                board: initBoard, moves: [], turn: 0, history: history 
+            });
         }
         closeWinOverlay();
     };
 
-    window.sendMessage = () => {
-        const inp = document.getElementById('chatInput');
-        if(inp.value.trim()) push(ref(db, `ongame_room/${currentRoomId}/chat`), { user: myName, text: inp.value, time: serverTimestamp() });
-        inp.value = "";
-    };
-    window.editName = () => {
-        const n = prompt("新名字:", myName);
-        if(n) { 
-            myName = n.trim(); localStorage.setItem('playerName', myName); 
-            document.getElementById('myNameDisplay').innerText = myName;
-            if(currentUserKey) update(ref(db, `ongame_room/${currentRoomId}/users/${currentUserKey}`), { name: myName });
-        }
-    };
-    window.leaveRoom = () => {
-        if(isLiarGame && currentUserKey) update(ref(db, `ongame_room/${currentRoomId}/users/${currentUserKey}`), { status: 'offline' }).then(()=>location.reload());
-        else location.reload();
-    };
-    window.deleteRoom = (id) => { if(confirm("刪除?")) remove(ref(db, 'ongame_room/' + id)); };
     window.closeWinOverlay = () => document.getElementById('win-overlay').style.display = 'none';
     window.showSection = (id) => {
         document.querySelectorAll('.container').forEach(c => c.classList.add('hidden'));
         document.getElementById(id).classList.remove('hidden');
     };
     
-    // Color Pickers
-    const p1 = document.getElementById('p1ColorPicker'), p2 = document.getElementById('p2ColorPicker');
-    const setCol = () => { 
-        document.documentElement.style.setProperty('--p1-color', p1.value); 
-        document.documentElement.style.setProperty('--p2-color', p2.value); 
+    window.leaveRoom = () => {
+        if (currentRoomId && currentUserKey) {
+            if (isLiarGame) {
+                update(ref(db, `ongame_room/${currentRoomId}/users/${currentUserKey}`), { status: 'offline' })
+                    .then(() => location.reload());
+            } else if (roomDataCache && roomDataCache.type === 'uno') {
+                update(ref(db, `ongame_room/${currentRoomId}/users/${currentUserKey}`), { online: false })
+                    .then(() => location.reload());
+            } else {
+                location.reload();
+            }
+        } else {
+            location.reload();
+        }
     };
-    p1.oninput = setCol; p2.oninput = setCol;
-    p1.onchange = () => currentRoomId && roomDataCache.type==='c4' && update(ref(db, `ongame_room/${currentRoomId}`), { p1Color: p1.value });
-    p2.onchange = () => currentRoomId && roomDataCache.type==='c4' && update(ref(db, `ongame_room/${currentRoomId}`), { p2Color: p2.value });
+    
+    window.deleteRoom = (id) => { if(confirm("確定刪除？")) remove(ref(db, 'ongame_room/' + id)); };
+    
+    const p1Picker = document.getElementById('p1ColorPicker');
+    const p2Picker = document.getElementById('p2ColorPicker');
+    const updateColors = () => {
+        document.documentElement.style.setProperty('--p1-color', p1Picker.value);
+        document.documentElement.style.setProperty('--p2-color', p2Picker.value);
+    };
+    p1Picker.addEventListener('input', updateColors);
+    p2Picker.addEventListener('input', updateColors);
+    p1Picker.addEventListener('change', () => {
+        if(currentRoomId && roomDataCache.type === 'c4') update(ref(db, `ongame_room/${currentRoomId}`), { p1Color: p1Picker.value });
+    });
+    p2Picker.addEventListener('change', () => {
+        if(currentRoomId && roomDataCache.type === 'c4') update(ref(db, `ongame_room/${currentRoomId}`), { p2Color: p2Picker.value });
+    });
+
+    // 自動水平滾動對手列，保持當前玩家在視窗中
+    window.addEventListener('DOMContentLoaded', () => {
+        function setupAutoScroll(containerSelector) {
+            const checkExist = setInterval(() => {
+                const container = document.querySelector(containerSelector);
+                if (container) {
+                    clearInterval(checkExist);
+                    let isUserScrolling = false;
+                    let scrollTimeout;
+
+                    container.addEventListener('scroll', () => {
+                        isUserScrolling = true;
+                        clearTimeout(scrollTimeout);
+                        scrollTimeout = setTimeout(() => {
+                            isUserScrolling = false;
+                        }, 3000);
+                    });
+
+                    const observer = new MutationObserver((mutations) => {
+                        if (isUserScrolling) return;
+
+                        for (const mutation of mutations) {
+                            if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
+                                if (mutation.target.classList && mutation.target.classList.contains('active')) {
+                                    mutation.target.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+                                }
+                            } 
+                            else if (mutation.type === 'childList') {
+                                const activeEl = container.querySelector('.active');
+                                if (activeEl) {
+                                    activeEl.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+                                }
+                            }
+                        }
+                    });
+
+                    observer.observe(container, { 
+                        attributes: true, 
+                        childList: true, 
+                        subtree: true, 
+                        attributeFilter: ['class'] 
+                    });
+                }
+            }, 1000);
+        }
+
+        setupAutoScroll('.uno-opponents-bar');
+        setupAutoScroll('.opponents-row');
+    });
 
 </script>
 </body>
