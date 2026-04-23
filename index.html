@@ -1364,16 +1364,7 @@
             }
         }
 
-        if (existingKey && isOnline) {
-            const title = document.getElementById('modalTitle');
-            title.innerText = "痾ㄛ..好像有重複的名字 請重新輸入:>";
-            const box = document.querySelector('.modal-box');
-            box.classList.remove('shaking');
-            void box.offsetWidth; 
-            box.classList.add('shaking');
-            return; 
-        }
-
+        
         const targetRoomId = pendingRoomId;
         closeNameModal();
 
